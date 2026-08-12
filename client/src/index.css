@@ -1,49 +1,54 @@
 @import "tailwindcss";
 
 @theme {
-
-  /* Background */
-  --color-background: #0B1120;
+  /* =========================
+     BACKGROUND
+  ========================= */
+  --color-background: #050719;
   --color-sidebar: #0F172A;
-  --color-surface: #1E293B;
+  --color-surface: #0B0D25;
   --color-surface-hover: #334155;
-  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-overlay: rgba(0, 0, 0, 0.4);
 
-  /* Border */
-  --color-border: #334155;
-  --color-border-subtle: #1E293B;
+  /* =========================
+     BORDER
+  ========================= */
+  --color-border: #FFFFFF;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
   --color-border-focus: #6366F1;
   --color-border-error: #EF4444;
 
-  /* Text */
+  /* =========================
+     TEXT
+  ========================= */
   --color-text-primary: #FFFFFF;
-  --color-text-secondary: #94A3B8;
-  --color-text-muted: #64748B;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
 
-  /* Brand */
-  --color-primary: #6366F1;
-  --color-secondary: #8B5CF6;
-  --color-primary-subtle: rgba(99, 102, 241, 0.1);
+  /* =========================
+     BRAND
+  ========================= */
+  --color-primary: #8B5CF6;
+  --color-secondary: #7C3AED;
+  --color-primary-subtle: rgba(139, 92, 246, 0.1);
 
-  /* Status */
+  /* =========================
+     STATUS
+  ========================= */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   --color-info: #3B82F6;
 
-
   /* =========================
      FONTS
-     ========================= */
-
+  ========================= */
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
-
   /* =========================
      RADIUS
-     ========================= */
-
+  ========================= */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -51,7 +56,6 @@
   --radius-2xl: 16px;
   --radius-full: 9999px;
 }
-
 
 @layer base {
   html {

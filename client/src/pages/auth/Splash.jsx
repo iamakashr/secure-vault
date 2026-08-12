@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import bgImage from "../../assets/images/splash-bg.png";
-import logo from "../../assets/logos/securevault-logo.png";
+import logo from "../../assets/logos/securevault-logo-vertical-dark.png";
 import { Lock, ShieldCheck, Cloud } from "lucide-react";
 
 const Splash = () => {
@@ -36,7 +36,7 @@ const Splash = () => {
     <div className="relative flex min-h-screen flex-col overflow-hidden bg-background">
       {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-bottom bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-right bg-no-repeat"
         style={{
           backgroundImage: `url(${bgImage})`,
         }}
