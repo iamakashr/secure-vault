@@ -66,7 +66,7 @@ const Splash = () => {
         <img
           src={logo}
           alt="SecureVault"
-          className="h-auto w-[350px] max-w-[85vw] object-contain sm:w-[400px] lg:w-[450px]"
+          className="h-auto w-87.5 max-w-[85vw] object-contain sm:w-100 lg:w-112.5"
         />
 
         {/* Tagline */}
