@@ -1,13 +1,14 @@
-const AuthFooter = ({ text, linkText, onLinkClick }) => {
+import { Link } from "react-router-dom";
+
+const AuthFooter = ({ text, linkText, linkTo }) => {
   return (
     <p className="mt-6 text-center text-sm text-slate-300">
       {text}{" "}
-      <button
-        type="button"
-        onClick={onLinkClick}
+      <Link
+        to={linkTo}
         className="ml-1 font-medium text-purple-400 transition hover:text-purple-300">
         {linkText}
-      </button>
+      </Link>
     </p>
   );
 };
