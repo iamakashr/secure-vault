@@ -45,7 +45,7 @@ const Login = () => {
   };
 
   return (
-    <div className="relative h-screen overflow-hidden bg-[#060a1a] text-white">
+    <div className="relative h-screen overflow-hidden">
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-right bg-no-repeat"
@@ -54,8 +54,8 @@ const Login = () => {
         }}
       />
 
-      {/* Main Content */}
-      <div className="relative z-10 min-h-screen px-16 py-8">
+      {/* Content */}
+      <div className="relative z-10 flex h-full flex-col px-16 py-8">
         {/* Header */}
         <header className="flex items-start justify-between">
           {/* Logo */}
@@ -79,7 +79,7 @@ const Login = () => {
         </header>
 
         {/* Main */}
-        <main className="mx-auto flex min-h-[calc(100vh-112px)] max-w-[1400px] items-center justify-around gap-24">
+        <main className="mx-auto flex w-full max-w-[1400px] flex-1 items-center justify-around gap-24">
           {/* Left Section */}
           <section className="w-[560px] shrink-0 pb-16">
             <div className="max-w-[520px]">
@@ -250,7 +250,7 @@ const Login = () => {
         </main>
 
         {/* Footer */}
-        <footer className="absolute bottom-6 left-16 text-sm text-slate-400">
+        <footer className="text-sm text-slate-400">
           © 2026 SecureVault. All rights reserved.
         </footer>
       </div>
