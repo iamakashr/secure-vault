@@ -1,54 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
   /* =========================
-     BACKGROUND
-  ========================= */
+     BACKGROUNDS
+     ========================= */
   --color-background: #050719;
   --color-sidebar: #0F172A;
   --color-surface: #0B0D25;
-  --color-surface-hover: #334155;
+  --color-surface-hover: #131735;
   --color-overlay: rgba(0, 0, 0, 0.4);
 
   /* =========================
-     BORDER
-  ========================= */
-  --color-border: #FFFFFF;
-  --color-border-subtle: rgba(255, 255, 255, 0.1);
-  --color-border-focus: #6366F1;
+     BORDERS
+     ========================= */
+  --color-border: #252942;
+  --color-border-subtle: rgba(255, 255, 255, 0.10);
+  --color-border-focus: #8B5CF6;
   --color-border-error: #EF4444;
 
   /* =========================
      TEXT
-  ========================= */
+     ========================= */
   --color-text-primary: #FFFFFF;
   --color-text-secondary: #9CA3AF;
   --color-text-muted: #6B7280;
 
   /* =========================
      BRAND
-  ========================= */
+     ========================= */
   --color-primary: #8B5CF6;
+  --color-primary-hover: #A78BFA;
   --color-secondary: #7C3AED;
-  --color-primary-subtle: rgba(139, 92, 246, 0.1);
+  --color-primary-subtle: rgba(139, 92, 246, 0.10);
 
   /* =========================
      STATUS
-  ========================= */
+     ========================= */
   --color-success: #10B981;
   --color-warning: #F59E0B;
   --color-danger: #EF4444;
   --color-info: #3B82F6;
 
   /* =========================
-     FONTS
-  ========================= */
-  --font-sans: "Inter", sans-serif;
+     TYPOGRAPHY
+     ========================= */
+  --font-sans: "Plus Jakarta Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
   /* =========================
      RADIUS
-  ========================= */
+     ========================= */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -58,8 +60,13 @@
 }
 
 @layer base {
-  html {
-    font-family: "Inter", sans-serif;
+  html,
+  body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+
+  * {
+    font-family: inherit;
   }
 
   body {
