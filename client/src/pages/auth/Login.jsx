@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
   ShieldCheck,
@@ -41,7 +42,7 @@ const Login = () => {
 
   return (
     <div className="relative h-screen overflow-hidden bg-background font-sans text-text-primary antialiased">
-      {/* HEADER */}
+      {/* ==================== HEADER ==================== */}
       <header className="relative z-10 flex items-center justify-between px-8 py-7 lg:px-16">
         {/* LOGO */}
         <img
@@ -54,9 +55,9 @@ const Login = () => {
         <DarkModeBtn />
       </header>
 
-      {/*  MAIN  */}
+      {/* ==================== MAIN ==================== */}
       <main className="relative z-10 mx-auto flex min-h-[calc(100vh-112px)] max-w-7xl items-center justify-between gap-20 overflow-hidden px-8 pb-10 lg:px-16">
-        {/* LEFT SECTION */}
+        {/* ==================== LEFT SECTION ==================== */}
         <section className="w-130 shrink-0">
           <div>
             {/* HEADING */}
@@ -97,7 +98,7 @@ const Login = () => {
           </div>
         </section>
 
-        {/*  LOGIN CARD  */}
+        {/* ==================== LOGIN CARD ==================== */}
         <section className="w-125 shrink-0">
           <AuthCard>
             {/* AUTH ICON */}
@@ -118,8 +119,8 @@ const Login = () => {
               </p>
             </div>
 
-            {/*  FORM  */}
-            <form onSubmit={handelSubmit} className="mt-6 space-y-3">
+            {/* ==================== FORM ==================== */}
+            <form onSubmit={handelSubmit} className="mt-6 space-y-4">
               {/* EMAIL */}
               <div>
                 <label
@@ -196,11 +197,11 @@ const Login = () => {
                   <span>Remember me</span>
                 </label>
 
-                <button
-                  type="button"
+                <Link
+                  to="/forgot-password"
                   className="text-sm font-medium text-primary transition-colors duration-200 hover:text-primary">
                   Forgot password?
-                </button>
+                </Link>
               </div>
 
               {/* SIGN IN */}
@@ -224,7 +225,7 @@ const Login = () => {
         </section>
       </main>
 
-      {/* FOOTER */}
+      {/* ==================== FOOTER ==================== */}
       <footer className="absolute bottom-6 left-8 text-sm text-text-muted lg:left-16">
         © 2026 SecureVault. All rights reserved.
       </footer>
