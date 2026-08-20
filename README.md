@@ -1,275 +1,284 @@
 # 🔐 SecureVault
 
-> A modern, secure, and premium password manager interface designed to help users store, manage, generate, and monitor their passwords with confidence.
+> A modern, secure, and premium password manager application designed to help users store, manage, generate, and monitor their passwords with confidence.
 
-SecureVault is a dark-themed password manager application built around a consistent design system and reusable UI components. The application provides secure password management, password generation, security monitoring, authentication flows, vault operations, and responsive experiences across desktop and mobile devices.
+SecureVault is a full-stack password manager application built with a premium dark-themed interface, reusable React components, Tailwind CSS, and a Node.js/Express backend connected to MongoDB.
+
+The project currently focuses on building a polished authentication experience, password management interface, and the foundation for secure frontend-to-backend communication.
 
 ---
 
 ## ✨ Features
 
-### 🔑 Password Management
+### 🔐 Authentication
 
-* Add, edit, view, and delete passwords
-* Secure password details with masked/reveal functionality
-* Copy usernames and passwords quickly
-* Password favorites
-* Password categories and tags
-* Grid and table views
-* Search, sorting, and advanced filtering
-* Bulk password actions
-* Duplicate password detection
-* Password history
-* Move passwords to trash
-* Restore deleted passwords
-* Permanent deletion
-
-### 🛡️ Security Center
-
-* Live security score
-* Weak password detection
-* Reused password reports
-* Compromised password alerts
-* Password age monitoring
-* Security recommendations
-* Breach alert notifications
-* Device management
-* Active session management
-* Login history
-
-### 🔐 Authentication & Vault Security
+SecureVault currently includes a complete authentication UI flow with:
 
 * Splash screen
 * Welcome screen
-* Login and registration
-* Forgot password flow
-* Reset password flow
-* Email verification
-* OTP verification
-* Two-factor authentication
-* Create master password
-* Unlock vault
-* Session expiration handling
-* Logout confirmation
-
-### 🎲 Password Generator
-
-* Generate secure passwords
-* Configurable password length
-* Uppercase and lowercase characters
-* Numbers and symbols
-* Character exclusion options
+* Login page
+* Registration page
+* Forgot password page
+* OTP verification page
+* Password reset page
+* 404 Not Found page
 * Password strength feedback
-* Generator history
+* Show/hide password functionality
+* Dark mode control
+* Form validation states
+* Loading states
+* Error handling states
+* Responsive authentication layouts
 
-### ⚙️ Vault & Account Operations
+### 🔑 Password Management Interface
 
-* User profile management
-* Change password
-* Avatar management
-* Application settings
-* Theme preferences
-* Import passwords
-* Export passwords
-* Trash management
+The password manager dashboard UI includes:
+
+* Password list
+* Password cards
+* Password table
+* Add password form
+* Password categories
+* Favorite passwords
+* Password visibility controls
+* Password generation
+* Search interface
+* Sorting controls
+* Category filtering
+* List and grid views
+* Pagination
+* Password statistics
+* Responsive password management layouts
+
+### 🛡️ Security-Focused UI
+
+The interface is designed around security-focused experiences including:
+
+* Password strength feedback
+* Secure password generation
+* Authentication verification
+* OTP-based password recovery
+* Protected password visibility
+* Security-focused authentication messaging
+* Session and authentication architecture planned for backend integration
 
 ---
 
 ## 🎨 Design System
 
-SecureVault follows a single dark-premium design language across authentication, vault, security, and settings screens.
+SecureVault follows a premium dark design language across authentication and application screens.
 
 ### Core Design Principles
 
-* Consistent dark-themed interface
-* Indigo-to-violet accent gradient
+* Premium dark-themed interface
+* Clean and minimal visual hierarchy
+* No unnecessary gradients
+* Consistent spacing system
 * Reusable UI components
 * Token-based design system
-* No unnecessary hardcoded styling values
-* Consistent spacing and border-radius system
+* Consistent borders and border-radius
+* Subtle shadows
 * Smooth and purposeful animations
-* Responsive-first behavior
+* Responsive-first layouts
+* Security-focused visual language
 
-### Primary Colors
+### Visual Style
 
-| Token              | Color     | Usage                            |
-| ------------------ | --------- | -------------------------------- |
-| Background Primary | `#0B1120` | Main page background             |
-| Background Sidebar | `#0F172A` | Sidebar                          |
-| Background Card    | `#1E293B` | Cards and inputs                 |
-| Background Hover   | `#334155` | Hover states                     |
-| Brand Primary      | `#6366F1` | Primary actions                  |
-| Brand Secondary    | `#8B5CF6` | Gradient highlights              |
-| Success            | `#10B981` | Success states                   |
-| Warning            | `#F59E0B` | Warning states                   |
-| Danger             | `#EF4444` | Errors and compromised passwords |
-| Info               | `#3B82F6` | Informational states             |
+The application uses a dark interface with subtle surface differences rather than pure black backgrounds.
 
-The design system is based on reusable color, spacing, radius, shadow, and animation tokens.
+Common visual patterns include:
+
+* Dark background surfaces
+* Elevated cards
+* Subtle borders
+* Indigo and violet accent colors
+* Muted secondary text
+* Glass-like modal overlays
+* Subtle backdrop blur
+* Smooth hover and focus states
+
+The design system is built around reusable background, text, border, radius, shadow, and spacing tokens.
 
 ---
 
 ## 🧩 Application Architecture
 
-SecureVault uses three main layout structures:
+SecureVault is structured around reusable application areas rather than creating completely independent UI for every screen.
 
-### 1. Auth Shell
+### 1. Authentication
 
 Used for authentication-related screens.
 
-* Centered authentication card
-* No sidebar or top navigation
-* Security-focused layout
-* Smooth page transitions
+Current authentication pages include:
 
-### 2. App Shell
+* Splash
+* Welcome
+* Login
+* Register
+* Forgot Password
+* Verify OTP
+* Reset Password
+* Not Found
 
-Used for authenticated application screens.
+The authentication experience uses shared components such as:
 
-* Fixed sidebar
-* Top navigation bar
-* Main content area
-* Shared navigation patterns
+* AuthCard
+* AuthFeature
+* AuthFooter
+* PasswordStrength
+* DarkModeBtn
 
-### 3. Error Pages
+### 2. Dashboard
 
-Used for global error states such as:
+The dashboard provides the main password management interface.
 
-* 401 Unauthorized
-* 403 Forbidden
-* 404 Not Found
-* 500 Server Error
-* Offline
-* Maintenance
+Current UI components include:
 
-The application structure is designed around these reusable shells rather than creating a separate layout for every screen.
+* Navbar
+* Sidebar
+* StatsCard
+* PasswordTable
+* PasswordRow
+* PasswordCard
+* FilterBar
+* Pagination
+* Modal
+* AddPasswordForm
+
+### 3. Backend
+
+The backend is built with Node.js and Express and currently provides the foundation for API development.
+
+Current backend setup includes:
+
+* Express application
+* Server entry point
+* Environment configuration
+* MongoDB connection
+* CORS configuration
+* Backend routes structure
+
+The backend is being developed alongside the frontend authentication flow.
 
 ---
 
 ## 📱 Responsive Design
 
-SecureVault adapts across multiple screen sizes.
+SecureVault is designed to provide a consistent experience across different screen sizes.
 
 ### Desktop
 
-* Full sidebar
-* Full password table
-* Centered modal overlays
-* Full-density layout
+* Full authentication layouts
+* Sidebar navigation
+* Password table views
+* Grid views
+* Centered modals
+* Full-width dashboard layouts
 
 ### Laptop
 
-* Collapsible sidebar
-* Compact spacing
-* Reduced table columns where needed
+* Compact dashboard spacing
+* Responsive password tables
+* Flexible authentication layouts
 
 ### Tablet
 
-* Sidebar becomes a hamburger drawer
-* Password tables transform into card lists
-* Search becomes full-width
-* Single-column layouts
+* Responsive navigation
+* Adaptable password layouts
+* Flexible form and card widths
 
 ### Mobile
 
-* Drawer-based navigation
-* Bottom navigation bar
-* Compact password cards
-* Floating Add Password button
-* Bottom-sheet modals
-* Swipe actions for password cards
+* Responsive authentication screens
+* Mobile-friendly password cards
+* Flexible dashboard layouts
+* Responsive forms and controls
 
-Responsive behavior is a core part of the product design, especially the transformation from desktop password tables to mobile-friendly password cards.
+Responsive behavior is an important part of the project, especially for authentication forms and password management components.
 
 ---
 
 ## 🧱 Core UI Components
 
-The project is built using reusable components to maintain consistency across all screens.
+The project is built using reusable components to maintain consistency across the application.
 
-### Buttons
+### Authentication Components
 
-* Primary
-* Secondary
-* Ghost
-* Danger
-* Icon-only
+* AuthCard
+* AuthFeature
+* AuthFooter
+* PasswordStrength
+* SocialLogin
+* DarkModeBtn
 
-Supported states include:
+### Dashboard Components
 
-* Default
-* Hover
-* Active
-* Loading
-* Disabled
+* StatsCard
+* PasswordTable
+* PasswordRow
+* PasswordCard
+* FilterBar
+* Pagination
 
 ### Form Components
 
-* Text input
+* AddPasswordForm
+* Email input
 * Password input
-* Search input
-* Select input
 * OTP input
-* Checkbox
-* Radio button
-* Toggle
-* Password strength meter
+* Password strength indicator
+* Password visibility controls
 
-### Data Components
+### Layout Components
 
-* Password Row
-* Password Card
-* Stat Card
-* Tables
-* Pagination
-* Tabs
-* Accordion
-* Category badges
-* Tags
-
-### Navigation
-
-* Sidebar
 * Navbar
-* Breadcrumb
-* Tab navigation
-* Bottom mobile navigation
+* Sidebar
+* Authentication layouts
+* Dashboard layouts
 
 ### Feedback & Overlays
 
-* Modals
-* Toast notifications
-* Dropdown menus
-* Tooltips
-* Skeleton loaders
-* Empty states
-* Security alerts
+* Modal
+* Error states
+* Loading states
+* Success states
+* Form validation feedback
 
-The component system is intended to ensure screens are assembled from reusable building blocks instead of being designed independently.
+The component architecture is designed to make screens reusable, consistent, and easier to maintain.
 
 ---
 
-## 🔔 Notifications
+## 🔌 Frontend & Backend Integration
 
-SecureVault provides multiple feedback states through toast notifications.
+SecureVault has started integrating the React frontend with the Node.js/Express backend.
 
-Examples include:
+### Frontend Services
 
-* Password copied successfully
-* Password saved
-* Password updated
-* Password moved to trash
-* Password restored
-* Import completed
-* Export downloaded
-* 2FA enabled
-* Profile updated
-* Clipboard cleared
-* Session expiration warning
-* Network retry warning
-* New breach detected
+The frontend includes a dedicated services layer:
 
-Critical security alerts remain visible until the user takes action.
+```text
+client/
+└── src/
+    └── services/
+        ├── api.js
+        └── authServices.js
+```
+
+### API Client
+
+Axios is used for HTTP communication between the frontend and backend.
+
+The API service layer is responsible for providing a centralized place for backend requests.
+
+### Authentication Services
+
+`authServices.js` provides the foundation for connecting authentication-related frontend actions with backend API endpoints.
+
+### Backend CORS
+
+The Express backend is configured with CORS to allow communication between the frontend development server and backend API.
+
+Frontend and backend integration is currently in progress.
 
 ---
 
@@ -278,46 +287,48 @@ Critical security alerts remain visible until the user takes action.
 ```text
 SecureVault/
 │
-├── public/
+├── client/
+│   ├── public/
+│   │
+│   ├── src/
+│   │   ├── assets/
+│   │   │   ├── images/
+│   │   │   └── logos/
+│   │   │
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   ├── dashboard/
+│   │   │   ├── forms/
+│   │   │   ├── layout/
+│   │   │   └── ui/
+│   │   │
+│   │   ├── pages/
+│   │   │   └── auth/
+│   │   │
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   └── authServices.js
+│   │   │
+│   │   └── styles/
+│   │
+│   └── package.json
 │
-├── src/
-│   ├── assets/
-│   │   ├── images/
-│   │   ├── icons/
-│   │   └── logos/
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── config.js
+│   │   │   └── db.js
+│   │   │
+│   │   ├── routes/
+│   │   │
+│   │   ├── app.js
+│   │   └── server.js
 │   │
-│   ├── components/
-│   │   ├── ui/
-│   │   ├── forms/
-│   │   ├── password/
-│   │   ├── security/
-│   │   ├── navigation/
-│   │   └── overlays/
-│   │
-│   ├── layouts/
-│   │   ├── AuthLayout/
-│   │   ├── AppLayout/
-│   │   └── ErrorLayout/
-│   │
-│   ├── pages/
-│   │   ├── auth/
-│   │   ├── dashboard/
-│   │   ├── passwords/
-│   │   ├── generator/
-│   │   ├── security/
-│   │   ├── trash/
-│   │   ├── profile/
-│   │   └── settings/
-│   │
-│   ├── hooks/
-│   ├── services/
-│   ├── utils/
-│   ├── constants/
-│   ├── routes/
-│   └── styles/
+│   ├── .gitignore
+│   └── package.json
 │
-├── package.json
-└── README.md
+├── README.md
+└── ...
 ```
 
 ---
@@ -328,59 +339,85 @@ SecureVault/
 
 ```bash
 git clone <your-repository-url>
+cd SecureVault
 ```
 
-### 2. Navigate to the Project
+### 2. Install Frontend Dependencies
 
 ```bash
-cd securevault
-```
-
-### 3. Install Dependencies
-
-```bash
+cd client
 npm install
 ```
 
-### 4. Start the Development Server
+### 3. Start the Frontend
 
 ```bash
 npm run dev
 ```
 
-The application should now be available on your local development server.
+### 4. Install Backend Dependencies
+
+Open another terminal:
+
+```bash
+cd server
+npm install
+```
+
+### 5. Start the Backend
+
+```bash
+npm run dev
+```
+
+The frontend and backend can then run independently during development.
 
 ---
 
-## 🛠️ Suggested Tech Stack
+## 🛠️ Tech Stack
+
+### Frontend
 
 * **React** — User interface
 * **Vite** — Development and build tooling
-* **Tailwind CSS** or custom CSS — Styling
+* **Tailwind CSS v4** — Styling and design system
+* **React Router** — Client-side navigation
 * **Lucide React** — Icons
-* **Framer Motion** — Animations
-* **React Router** — Navigation
-* **REST API** — Backend communication
+* **Axios** — Frontend API communication
+
+### Backend
+
+* **Node.js** — Runtime environment
+* **Express.js** — Backend framework
+* **MongoDB** — Database
+* **Mongoose** — MongoDB object modeling
+* **CORS** — Frontend/backend communication
+* **dotenv** — Environment configuration
 
 ---
 
 ## 🔌 API Integration
 
-The planned application structure supports RESTful endpoints for:
+The backend API is currently being developed alongside the frontend authentication system.
 
 ### Authentication
 
+The authentication architecture is being built around endpoints for:
+
 ```text
-POST /auth/login
 POST /auth/register
+POST /auth/login
 POST /auth/forgot-password
+POST /auth/verify-otp
 POST /auth/reset-password
-POST /auth/verify-email
-POST /auth/2fa/verify
-POST /auth/unlock
+POST /auth/logout
 ```
 
+The exact endpoint structure may evolve as the backend controllers, models, and authentication logic are implemented.
+
 ### Password Management
+
+The planned password management API includes operations such as:
 
 ```text
 GET    /passwords
@@ -388,96 +425,171 @@ GET    /passwords/:id
 POST   /passwords
 PUT    /passwords/:id
 DELETE /passwords/:id
-PATCH  /passwords/bulk-delete
-POST   /passwords/:id/restore
 ```
 
-### Search & Filtering
+These endpoints will be implemented as the backend password management system is developed.
 
-```text
-GET /passwords/search
-```
+---
 
-Supported filtering can include categories, password strength, tags, date ranges, and favorites.
+## 🔐 Authentication Architecture
 
-### Security
+The authentication system is being designed with backend security as the source of truth.
 
-```text
-GET /security/score
-GET /security/weak
-GET /security/reused
-GET /security/compromised
-GET /security/devices
-GET /security/sessions
-GET /security/login-history
-```
+The planned authentication architecture includes:
 
-The design specification also defines API areas for password generation, trash, profile, settings, import, and export workflows.
+* Password hashing on the backend
+* JWT access tokens
+* Refresh tokens
+* Session management
+* Secure authentication cookies
+* Protected API routes
+* OTP-based password recovery
+* Backend validation
+* Authentication middleware
+* Logout and session invalidation
+
+Sensitive authentication operations are intentionally handled by the backend rather than relying on frontend-only security.
 
 ---
 
 ## 🎯 Design & Development Principles
 
 ```text
-Tokens → Components → Patterns → Screens
+Tokens → Components → Patterns → Screens → API Integration
 ```
 
-SecureVault follows a component-first workflow:
+SecureVault follows a component-first development workflow:
 
-1. Define design tokens
-2. Build reusable components
+1. Define reusable design tokens
+2. Build reusable UI components
 3. Create shared interaction patterns
-4. Build layout templates
+4. Build application layouts
 5. Assemble complete screens
+6. Connect frontend services to backend APIs
+7. Implement backend authentication and data operations
 
-This approach keeps the UI consistent and reduces duplication across the application.
+This approach keeps the interface consistent while allowing the frontend and backend to evolve independently.
+
+---
+
+## 📈 Current Development Status
+
+### ✅ Completed
+
+* React frontend setup
+* Vite setup
+* Tailwind CSS v4 setup
+* Premium dark UI system
+* Authentication UI
+* Login page
+* Registration page
+* Forgot Password page
+* OTP verification page
+* Reset Password page
+* Welcome page
+* Splash screen
+* 404 Not Found page
+* Password strength component
+* Dashboard UI foundation
+* Password table and card components
+* Add Password form
+* Password generator UI
+* Filtering and sorting UI
+* Pagination
+* Modal system
+* Navbar and Sidebar
+* Backend server setup
+* Express application setup
+* MongoDB connection setup
+* Environment configuration
+* Backend CORS setup
+* Backend routes structure
+* Axios installation
+* Frontend API service
+* Authentication service layer
+
+### 🚧 In Progress
+
+* Frontend authentication API integration
+* Backend authentication routes
+* Authentication controllers
+* Authentication models
+* JWT authentication
+* Refresh token flow
+* Session management
+* Registration API
+* Login API
+* Forgot password API
+* OTP verification API
+* Password reset API
+
+### 🗺️ Planned
+
+* Complete password CRUD API
+* Secure password storage
+* Password encryption
+* Password history
+* Favorites persistence
+* Categories and tags
+* Search and filtering API
+* Security dashboard
+* Security score
+* Reused password detection
+* Weak password detection
+* Compromised password detection
+* Device and session management
+* Profile management
+* Import/export
+* Trash and recovery
+* Production deployment
+* Additional security hardening
 
 ---
 
 ## 🔒 Security Notice
 
-SecureVault is designed as a password management interface. Before using the application in production, ensure that sensitive features are backed by a properly implemented security architecture, including secure authentication, encrypted vault storage, secure password handling, protected API communication, and appropriate session management.
+SecureVault is being developed as a password management application.
+
+Security-sensitive functionality must be handled by the backend and should not rely on frontend protection alone.
+
+Before production use, the application should include:
+
+* Secure password hashing
+* Encrypted sensitive data
+* Secure JWT handling
+* Refresh token protection
+* Protected API routes
+* Secure cookies
+* Input validation
+* Rate limiting
+* Session management
+* Proper CORS configuration
+* HTTPS
+* Security headers
+* Secure database access
 
 **Never rely on frontend UI alone to secure sensitive password data.**
 
 ---
 
-## 🗺️ Project Scope
-
-The SecureVault design system covers a broad set of product surfaces, including:
-
-* Authentication
-* Password management
-* Security monitoring
-* Password generation
-* Trash and recovery
-* Profile management
-* Settings
-* Global feedback
-* Error states
-* Modals
-* Toasts
-* Dropdown menus
-* Responsive mobile experiences
-
-The overall specification defines a system of more than 70 screens and states built around a shared component library and design-token foundation.
-
----
-
 ## 📸 Screenshots
 
-> Add screenshots or GIF previews of the following screens here:
+The project currently includes authentication and dashboard interfaces such as:
 
 * Splash Screen
+* Welcome Screen
 * Login
+* Registration
+* Forgot Password
+* OTP Verification
+* Reset Password
 * Dashboard
 * Password List
-* Password Details
 * Add Password
 * Password Generator
-* Security Center
-* Settings
-* Mobile View
+* Responsive layouts
+
+Screenshots can be added here as the project continues to evolve.
 
 ---
 
@@ -489,10 +601,12 @@ When contributing:
 
 1. Keep the existing design system consistent.
 2. Reuse existing components whenever possible.
-3. Avoid unnecessary hardcoded values.
-4. Follow the existing folder structure.
-5. Ensure responsive behavior is maintained.
-6. Test all component states before submitting changes.
+3. Avoid unnecessary hardcoded styling values.
+4. Follow the existing client/server folder structure.
+5. Keep frontend and backend responsibilities separated.
+6. Maintain responsive behavior.
+7. Follow the existing authentication architecture.
+8. Test component and API states before submitting changes.
 
 ---
 
