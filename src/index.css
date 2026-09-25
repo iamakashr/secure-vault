@@ -1,19 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
 @import "tailwindcss";
 
-:root {
-  font-family: Inter, sans-serif;
+@theme {
+  /* ================================
+     Fonts
+     ================================ */
+
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  /* ================================
+     Backgrounds
+     ================================ */
+
+  --color-bg: #0a0d12;
+  --color-panel: #0d1117;
+  --color-surface: #11151c;
+  --color-surface-raised: #151a22;
+
+  /* ================================
+     Borders
+     ================================ */
+
+  --color-border: #1e2530;
+  --color-border-soft: #171d27;
+
+  /* ================================
+     Text
+     ================================ */
+
+  --color-text: #e7e9ee;
+  --color-text-dim: #9099a8;
+  --color-text-faint: #5c6472;
+
+  /* ================================
+     Primary / Accent
+     ================================ */
+
+  --color-accent: #5b8def;
+  --color-accent-dim: #3a5a94;
+  --color-accent-glow: rgba(91, 141, 239, 0.16);
+
+  /* ================================
+     Status
+     ================================ */
+
+  --color-good: #4fbf82;
+  --color-good-glow: rgba(79, 191, 130, 0.14);
 }
 
-* {
-  box-sizing: border-box;
-}
+/* ================================
+   Base
+   ================================ */
 
-html,
-body,
-#root {
-  min-height: 100%;
-}
+@layer base {
+  html,
+  body {
+    min-height: 100%;
+  }
 
-body {
-  margin: 0;
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-accent-glow);
+    color: var(--color-text);
+  }
 }
