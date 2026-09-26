@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Imported useNavigate for the mock flow
 import { Mail } from "lucide-react";
 
 import CenteredAuthLayout from "../components/CenteredAuthLayout";
 import AuthIcon from "../components/AuthIcon";
+import Toast from "../../../components/ui/Toast";
 
 const VerifyEmail = () => {
+  const navigate = useNavigate(); // Added for handling mock redirection
   const [timeLeft, setTimeLeft] = useState(30);
+  const [showToast, setShowToast] = useState(false);
+
+  // Countdown timer logic
   useEffect(() => {
     if (timeLeft === 0) return;
 
@@ -16,9 +21,36 @@ const VerifyEmail = () => {
 
     return () => clearInterval(timer);
   }, [timeLeft]);
+
+  /* START: FRONTEND MOCK SIMULATION  */
+  useEffect(() => {
+    const handleMockVerification = (event) => {
+      // Pressing 'v' or 'V' on your keyboard simulates clicking the email link
+      if (event.key === "v" || event.key === "V") {
+        // setShowToast(true); // Trigger your notification toast immediately
+
+        // Simulate a slight delay to let the user see the success toast before navigating
+        setTimeout(() => {
+          setShowToast(false);
+          navigate("/verification-success"); // Change this to your target onboarding or dashboard route
+        }, 1500);
+      }
+    };
+
+    window.addEventListener("keydown", handleMockVerification);
+    return () => window.removeEventListener("keydown", handleMockVerification);
+  }, [navigate]);
+  /* END: FRONTEND MOCK SIMULATION */
+
   const handleResend = () => {
     setTimeLeft(30);
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 2500);
   };
+
   return (
     <CenteredAuthLayout
       topRight={
@@ -29,7 +61,7 @@ const VerifyEmail = () => {
           </Link>
         </p>
       }>
-      <div className="w-full max-w-[465px] text-center">
+      <div className="w-full max-w-116 text-center">
         {/* Icon */}
         <div className="mb-7 flex justify-center">
           <AuthIcon icon={Mail} />
@@ -45,9 +77,9 @@ const VerifyEmail = () => {
           <span className="font-mono text-sm text-text">you@company.com</span>
         </div>
 
-        <p className="mx-auto mt-5 max-w-[420px] text-base leading-7 text-text-dim">
-          We've sent a verification link to this address. <br /> Open it to
-          activate your vault and finish setting up your account.
+        <p className="mx-auto mt-5 max-w-105 text-base leading-7 text-text-dim">
+          We've sent a verification link to this address. <br />
+          Open it to activate your vault and finish setting up your account.
         </p>
 
         <p className="mt-3 text-sm text-text-dim">
@@ -78,6 +110,8 @@ const VerifyEmail = () => {
           ← Back to registration
         </Link>
       </div>
+
+      {showToast && <Toast message="New verification link sent successfully" />}
     </CenteredAuthLayout>
   );
 };

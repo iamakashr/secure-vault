@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserRound, Mail } from "lucide-react";
 
 import AuthBrandPanel from "../components/AuthBrandPanel";
@@ -14,6 +14,7 @@ import googleLogo from "../../../assets/logos/google-icon-logo.svg";
 const Register = () => {
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
@@ -29,11 +30,16 @@ const Register = () => {
   };
 
   return (
-    <div className="grid min-h-screen w-full grid-cols-2 bg-bg text-text max-[940px]:grid-cols-1">
+    <div className="grid min-h-screen w-full grid-cols-2 bg-bg text-text">
       {/* Left: Brand / Security panel */}
       <AuthBrandPanel
         logo={logo}
-        title="Your passwords, secured beyond reach."
+        title={
+          <>
+            Your passwords,
+            <br /> secured beyond reach.
+          </>
+        }
         description="One encrypted vault for every login, protected by architecture designed so that only you can ever unlock it."
         features={[
           "End-to-end encryption on every item you store",
@@ -44,8 +50,8 @@ const Register = () => {
       />
 
       {/* Right: Register form */}
-      <main className="flex items-center justify-center bg-bg px-10 py-12 max-[940px]:px-8">
-        <div className="w-full max-w-[380px]">
+      <main className="flex items-center justify-center bg-bg px-10 py-12">
+        <div className="w-full max-w-95">
           {/* Form header */}
           <div className="mb-8">
             <h2 className="text-2xl font-semibold tracking-tight text-text">
@@ -54,11 +60,11 @@ const Register = () => {
 
             <p className="mt-2 text-sm text-text-dim">
               Already protecting your passwords?{" "}
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="font-medium text-accent hover:underline">
-                Sign in
-              </a>
+                Login
+              </Link>
             </p>
           </div>
 
@@ -100,10 +106,20 @@ const Register = () => {
             />
 
             {/* Password */}
-            <PasswordInput required />
+            <PasswordInput
+              id="password"
+              name="password"
+              label="Master Password"
+              // value={password}
+              onChange={(e) => setPasswordValue(e.target.value)}
+              showPassword={showPassword}
+              onToggleVisibility={() => setShowPassword((prev) => !prev)}
+              required
+            />
 
             {/* Password strength */}
             {/* Add PasswordStrength here once password state is connected */}
+            {/* <PasswordStrength password={password} /> */}
 
             {/* Submit */}
             <AuthButton loading={isLoading}>Create account</AuthButton>
@@ -129,11 +145,12 @@ const Register = () => {
           {/* Sign in */}
           <p className="mt-8 text-center text-sm text-text-dim">
             Already have an account?{" "}
-            <a
-              href="/login"
+            <Link
+              to="/login"
               className="font-medium text-accent hover:underline">
-              Sign in
-            </a>
+              {" "}
+              Login
+            </Link>
           </p>
         </div>
       </main>

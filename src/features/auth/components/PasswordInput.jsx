@@ -50,10 +50,10 @@ const PasswordInput = ({
         </button>
       </div>
 
-      <p className="mt-2 text-[0.76rem] leading-6 text-text-faint">
+      {/* <p className="mt-2 text-[0.76rem] leading-6 text-text-faint">
         Use at least 12 characters. This unlocks your entire vault, so make it
         one only you know.
-      </p>
+      </p> */}
     </div>
   );
 };

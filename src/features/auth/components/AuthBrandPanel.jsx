@@ -11,7 +11,7 @@ const AuthBrandPanel = ({
   securityBadges = [],
 }) => {
   return (
-    <section className="relative flex min-h-screen flex-col justify-between overflow-hidden border-r border-border-soft bg-panel px-[4.5rem] py-[4.5rem] max-[940px]:min-h-0 max-[940px]:border-r-0 max-[940px]:border-b max-[940px]:px-9 max-[940px]:py-12">
+    <section className="relative flex min-h-screen flex-col justify-between overflow-hidden border-r border-border-soft bg-panel px-18 py-18">
       {/* Grid background */}
       <div className="pointer-events-none absolute inset-0 opacity-50">
         <div
@@ -43,8 +43,8 @@ const AuthBrandPanel = ({
       </Link>
 
       {/* Main brand content */}
-      <div className="relative z-10 mt-12 max-w-[420px]">
-        <h1 className="text-[2.35rem] font-semibold leading-[1.22] tracking-tight text-text max-[940px]:text-[1.8rem]">
+      <div className="relative z-10 mt-12 max-w-116">
+        <h1 className="text-[2.35rem] font-semibold leading-[1.28] tracking-normal text-text">
           {title}
         </h1>
 
@@ -53,7 +53,7 @@ const AuthBrandPanel = ({
         </p>
 
         {/* Features */}
-        <div className="mt-10 flex flex-col gap-[1.1rem] max-[940px]:mt-7">
+        <div className="mt-10 flex flex-col gap-[1.1rem]">
           {features.map((feature, index) => {
             const Icon = featureIcons[index] || Shield;
 
@@ -73,12 +73,12 @@ const AuthBrandPanel = ({
       </div>
 
       {/* Security badges */}
-      <div className="relative z-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border-soft pt-8 max-[940px]:pt-6">
+      <div className="relative z-10 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border-soft pt-8">
         {securityBadges.map((badge) => (
           <span
             key={badge}
             className="flex items-center gap-1.5 font-mono text-[0.7rem] tracking-wide text-text-faint">
-            <span className="h-[5px] w-[5px] rounded-full bg-accent-dim" />
+            <span className="h-1.25 w-1.25 rounded-full bg-accent-dim" />
             {badge}
           </span>
         ))}
