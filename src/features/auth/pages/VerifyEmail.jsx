@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Imported useNavigate for the mock flow
+import { Link, useNavigate } from "react-router-dom"; 
 import { Mail } from "lucide-react";
 
 import CenteredAuthLayout from "../components/CenteredAuthLayout";
@@ -7,7 +7,7 @@ import AuthIcon from "../components/AuthIcon";
 import Toast from "../../../components/ui/Toast";
 
 const VerifyEmail = () => {
-  const navigate = useNavigate(); // Added for handling mock redirection
+  const navigate = useNavigate(); 
   const [timeLeft, setTimeLeft] = useState(30);
   const [showToast, setShowToast] = useState(false);
 
@@ -57,7 +57,7 @@ const VerifyEmail = () => {
         <p className="text-sm text-text-dim">
           Already verified?{" "}
           <Link to="/login" className="font-medium text-accent hover:underline">
-            Login
+            Sign in
           </Link>
         </p>
       }>
