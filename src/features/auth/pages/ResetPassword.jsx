@@ -83,7 +83,7 @@ const ResetPassword = () => {
             </div>
 
             {/* Confirm password */}
-            <div className="mt-5">
+            <div className="mt-3">
               <PasswordInput
                 id="confirmPassword"
                 name="confirmPassword"

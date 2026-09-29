@@ -19,7 +19,7 @@ const PasswordStrength = ({ password = "" }) => {
         : "var(--color-good)";
 
   return (
-    <div className="mt-3">
+    <div className="mt-3 mb-2">
       {/* Strength bars */}
       <div className="flex gap-1">
         {[0, 1, 2, 3, 4].map((index) => (

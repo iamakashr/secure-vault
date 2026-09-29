@@ -8,6 +8,8 @@ const PasswordInput = ({
   autoComplete = "new-password",
   value,
   onChange,
+  onBlur,
+  error,
   showPassword = false,
   onToggleVisibility,
 }) => {
@@ -34,7 +36,14 @@ const PasswordInput = ({
           autoComplete={autoComplete}
           value={value}
           onChange={onChange}
-          className="w-full rounded-lg border border-border bg-surface py-[0.68rem] pl-10 pr-11 text-sm text-text outline-none placeholder:text-text-faint transition-colors hover:border-[#29303c] focus:border-accent-dim focus:bg-surface-raised focus:ring-4 focus:ring-accent-glow"
+          onBlur={onBlur}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={`w-full rounded-lg border bg-surface py-[0.68rem] pl-10 pr-11 text-sm text-text outline-none placeholder:text-text-faint transition-colors hover:border-[#29303c] focus:bg-surface-raised focus:ring-4 ${
+            error
+              ? "border-danger focus:border-danger focus:ring-[rgba(229,99,122,0.15)]"
+              : "border-border focus:border-accent-dim focus:ring-accent-glow"
+          }`}
         />
 
         <button
@@ -50,10 +59,11 @@ const PasswordInput = ({
         </button>
       </div>
 
-      {/* <p className="mt-2 text-[0.76rem] leading-6 text-text-faint">
-        Use at least 12 characters. This unlocks your entire vault, so make it
-        one only you know.
-      </p> */}
+      {error && (
+        <p id={`${id}-error`} className="mt-2 text-xs text-danger">
+          {error}
+        </p>
+      )}
     </div>
   );
 };

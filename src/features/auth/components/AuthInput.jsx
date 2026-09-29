@@ -8,6 +8,8 @@ const AuthInput = ({
   icon: Icon,
   value,
   onChange,
+  onBlur,
+  error,
   required = false,
 }) => {
   return (
@@ -35,10 +37,23 @@ const AuthInput = ({
           autoComplete={autoComplete}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           required={required}
-          className="w-full rounded-lg border border-border bg-surface py-[0.68rem] pl-10 pr-3.5 text-sm text-text outline-none placeholder:text-text-faint transition-colors hover:border-[#29303c] focus:border-accent-dim focus:bg-surface-raised focus:ring-4 focus:ring-accent-glow"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={`w-full rounded-lg border bg-surface py-[0.68rem] pl-10 pr-3.5 text-sm text-text outline-none placeholder:text-text-faint transition-colors hover:border-[#29303c] focus:bg-surface-raised focus:ring-4 ${
+            error
+              ? "border-danger focus:border-danger focus:ring-[rgba(229,99,122,0.15)]"
+              : "border-border focus:border-accent-dim focus:ring-accent-glow"
+          }`}
         />
       </div>
+
+      {error && (
+        <p id={`${id}-error`} className="mt-2 text-xs text-danger">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
