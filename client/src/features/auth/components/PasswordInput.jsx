@@ -1,71 +1,62 @@
-import { LockKeyhole, Eye, EyeOff } from "lucide-react";
+import { forwardRef } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
-const PasswordInput = ({
-  id = "password",
-  name = "password",
-  label = "Password",
-  placeholder = "Create a strong master password",
-  autoComplete = "new-password",
-  value,
-  onChange,
-  onBlur,
-  error,
-  showPassword = false,
-  onToggleVisibility,
-}) => {
-  return (
-    <div className="mb-[1.15rem]">
-      <label
-        htmlFor={id}
-        className="mb-2 block text-[0.82rem] font-medium text-text-dim">
-        {label}
-      </label>
+const PasswordInput = forwardRef(
+  (
+    {
+      id,
+      name,
+      label,
+      placeholder = "••••••••",
+      autoComplete = "new-password",
+      error,
+      showPassword,
+      onToggleVisibility,
+      required = false,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <div className="mb-5">
+        <label
+          htmlFor={id}
+          className="mb-2 block text-sm font-medium text-text">
+          {label}
+        </label>
 
-      <div className="relative flex items-center">
-        <LockKeyhole
-          size={15}
-          strokeWidth={1.8}
-          className="pointer-events-none absolute left-3.5 text-text-faint"
-        />
+        <div className="relative">
+          <input
+            {...props}
+            ref={ref}
+            id={id}
+            name={name}
+            type={showPassword ? "text" : "password"}
+            placeholder={placeholder}
+            autoComplete={autoComplete}
+            required={required}
+            className={`w-full rounded-lg border bg-surface py-3 pl-4 pr-11 text-sm text-text outline-none transition placeholder:text-text-faint ${
+              error
+                ? "!border-danger focus:!border-danger"
+                : "border-border focus:border-accent"
+            }`}
+          />
 
-        <input
-          id={id}
-          name={name}
-          type={showPassword ? "text" : "password"}
-          placeholder={placeholder}
-          autoComplete={autoComplete}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? `${id}-error` : undefined}
-          className={`w-full rounded-lg border bg-surface py-[0.68rem] pl-10 pr-11 text-sm text-text outline-none placeholder:text-text-faint transition-colors hover:border-[#29303c] focus:bg-surface-raised focus:ring-4 ${
-            error
-              ? "border-danger focus:border-danger focus:ring-[rgba(229,99,122,0.15)]"
-              : "border-border focus:border-accent-dim focus:ring-accent-glow"
-          }`}
-        />
+          <button
+            type="button"
+            onClick={onToggleVisibility}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-faint transition hover:text-text"
+            aria-label={showPassword ? "Hide password" : "Show password"}>
+            {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+          </button>
+        </div>
 
-        <button
-          type="button"
-          onClick={onToggleVisibility}
-          aria-label={showPassword ? "Hide password" : "Show password"}
-          className="absolute right-3 flex items-center justify-center p-1 text-text-faint hover:text-text-dim focus-visible:outline-2 focus-visible:outline-accent">
-          {showPassword ? (
-            <EyeOff size={16} strokeWidth={1.8} />
-          ) : (
-            <Eye size={16} strokeWidth={1.8} />
-          )}
-        </button>
+        {error && <p className="mt-1.5 text-xs text-danger">{error}</p>}
       </div>
+    );
+  },
+);
 
-      {error && (
-        <p id={`${id}-error`} className="mt-2 text-xs text-danger">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-};
+PasswordInput.displayName = "PasswordInput";
 
 export default PasswordInput;

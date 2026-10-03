@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserRound, Mail } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthBrandPanel from "../components/AuthBrandPanel";
 import AuthInput from "../components/AuthInput";
@@ -10,6 +12,7 @@ import AuthButton from "../components/AuthButton";
 import PasswordStrength from "../components/PasswordStrength";
 
 import { registerSchema } from "../schemas/authSchema";
+import useRegister from "../hooks/useRegister";
 
 import logo from "../../../assets/logos/securevault-logo.svg";
 import googleLogo from "../../../assets/logos/google-icon-logo.svg";
@@ -18,115 +21,85 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+  const {
+    register: registerUser,
+    isLoading,
+    error: registerError,
+  } = useRegister();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    clearErrors,
+    trigger,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+    mode: "onSubmit",
+    reValidateMode: "onBlur",
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
 
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-  const [errors, setErrors] = useState({});
+  const password = watch("password");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const nameField = register("name");
+  const emailField = register("email");
+  const passwordField = register("password");
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleNameBlur = async (event) => {
+    const value = event.target.value.trim();
 
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
+    nameField.onBlur(event);
 
-  const handleNameBlur = () => {
-    const result = registerSchema.shape.name.safeParse(formData.name);
-
-    if (!result.success) {
-      setErrors((prev) => ({
-        ...prev,
-        name: result.error.issues[0].message,
-      }));
-
+    if (!value) {
+      clearErrors("name");
       return;
     }
 
-    setErrors((prev) => ({
-      ...prev,
-      name: "",
-    }));
+    await trigger("name");
   };
 
-  const handleEmailBlur = () => {
-    const result = registerSchema.shape.email.safeParse(formData.email);
+  const handleEmailBlur = async (event) => {
+    const value = event.target.value.trim();
 
-    if (!result.success) {
-      setErrors((prev) => ({
-        ...prev,
-        email: result.error.issues[0].message,
-      }));
+    emailField.onBlur(event);
 
+    if (!value) {
+      clearErrors("email");
       return;
     }
 
-    setErrors((prev) => ({
-      ...prev,
-      email: "",
-    }));
+    await trigger("email");
   };
 
-  const handlePasswordBlur = () => {
-    const result = registerSchema.shape.password.safeParse(formData.password);
+  const handlePasswordBlur = async (event) => {
+    const value = event.target.value;
 
-    if (!result.success) {
-      setErrors((prev) => ({
-        ...prev,
-        password: result.error.issues[0].message,
-      }));
+    passwordField.onBlur(event);
 
+    if (!value) {
+      clearErrors("password");
       return;
     }
 
-    setErrors((prev) => ({
-      ...prev,
-      password: "",
-    }));
+    await trigger("password");
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    try {
+      await registerUser(data);
 
-    const result = registerSchema.safeParse(formData);
-
-    if (!result.success) {
-      const fieldErrors = {};
-
-      result.error.issues.forEach((issue) => {
-        const fieldName = issue.path[0];
-
-        if (fieldName && !fieldErrors[fieldName]) {
-          fieldErrors[fieldName] = issue.message;
-        }
-      });
-
-      setErrors(fieldErrors);
-      return;
-    }
-
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
       navigate("/verify-email");
-    }, 1500);
-
-    console.log(result.data);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (
@@ -169,65 +142,63 @@ const Register = () => {
 
           <div className="my-6 flex items-center gap-3.5">
             <div className="h-px flex-1 bg-border" />
+
             <span className="text-xs text-text-faint">or</span>
+
             <div className="h-px flex-1 bg-border" />
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <AuthInput
               id="name"
-              name="name"
               label="Name"
               placeholder="Jordan Blake"
               autoComplete="name"
               icon={UserRound}
-              value={formData.name}
-              onChange={handleChange}
-              onBlur={handleNameBlur}
-              error={errors.name}
+              error={errors.name?.message}
               required
+              {...nameField}
+              onBlur={handleNameBlur}
             />
 
             <AuthInput
               id="email"
-              name="email"
               type="email"
               label="Email"
               placeholder="you@company.com"
               autoComplete="email"
               icon={Mail}
-              value={formData.email}
-              onChange={handleChange}
-              onBlur={handleEmailBlur}
-              error={errors.email}
+              error={errors.email?.message}
               required
+              {...emailField}
+              onBlur={handleEmailBlur}
             />
 
             <div
               onFocus={() => setIsPasswordFocused(true)}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget)) {
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) {
                   setIsPasswordFocused(false);
-                  handlePasswordBlur();
                 }
               }}>
               <PasswordInput
                 id="password"
-                name="password"
                 label="Password"
-                value={formData.password}
-                onChange={handleChange}
-                onBlur={handlePasswordBlur}
-                error={errors.password}
+                error={errors.password?.message}
                 showPassword={showPassword}
                 onToggleVisibility={() => setShowPassword((prev) => !prev)}
-                required
+                {...passwordField}
+                onBlur={handlePasswordBlur}
               />
 
-              {isPasswordFocused && (
-                <PasswordStrength password={formData.password} />
-              )}
+              {isPasswordFocused && <PasswordStrength password={password} />}
             </div>
+
+            {registerError && (
+              <p className="mb-4 text-sm text-weak">
+                Registration failed. Please try again.
+              </p>
+            )}
 
             <AuthButton type="submit" loading={isLoading}>
               Create account
