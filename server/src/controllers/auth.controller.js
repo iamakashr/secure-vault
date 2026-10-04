@@ -2,6 +2,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
+import { generateVerificationEmail, sendEmail } from "../utils/send-email.js";
 import { registerSchema } from "../validators/auth.validator.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -60,6 +61,15 @@ const register = asyncHandler(async (req, res) => {
   user.emailVerificationExpiry = tokenExpiry;
 
   await user.save({ validateBeforeSave: false });
+
+  await sendEmail({
+    email: user?.email,
+    subject: "Please verify your email",
+    mailgenContent: generateVerificationEmail(
+      user.name,
+      `${req.protocol}://${req.get("host")}/api/auth/verify-email/${unHashedToken}`,
+    ),
+  });
 
   const createdUser = await User.findById(user._id).select(
     "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
