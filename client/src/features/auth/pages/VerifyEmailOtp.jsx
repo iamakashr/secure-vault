@@ -7,7 +7,7 @@ import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
 import Toast from "../../../components/ui/Toast";
 
-const VerifyOtp = () => {
+const VerifyEmailOtp = () => {
   const navigate = useNavigate();
 
   const [timeLeft, setTimeLeft] = useState(30);
@@ -16,6 +16,7 @@ const VerifyOtp = () => {
 
   const inputRefs = useRef([]);
 
+  // Resend cooldown timer
   useEffect(() => {
     if (timeLeft === 0) return;
 
@@ -26,10 +27,11 @@ const VerifyOtp = () => {
     return () => clearInterval(timer);
   }, [timeLeft]);
 
+  // Handle OTP typing
   const handleOtpChange = (e, index) => {
     const value = e.target.value;
 
-    // Allow only numbers
+    // Only allow numbers
     if (!/^\d*$/.test(value)) {
       return;
     }
@@ -38,33 +40,80 @@ const VerifyOtp = () => {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Move to next input after entering a number
+    // Move to next input
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
+  // Handle OTP paste
+  const handleOtpPaste = (e, index) => {
+    e.preventDefault();
+
+    const pastedValue = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+
+    if (!pastedValue) {
+      return;
+    }
+
+    const newOtp = [...otp];
+
+    pastedValue.split("").forEach((digit, offset) => {
+      const targetIndex = index + offset;
+
+      if (targetIndex < 6) {
+        newOtp[targetIndex] = digit;
+      }
+    });
+
+    setOtp(newOtp);
+
+    // Focus the last filled input
+    const lastIndex = Math.min(index + pastedValue.length - 1, 5);
+
+    inputRefs.current[lastIndex]?.focus();
+  };
+
+  // Handle backspace
   const handleKeyDown = (e, index) => {
-    // Move to previous input when backspacing an empty input
+    // Move back when pressing backspace on an empty input
     if (e.key === "Backspace" && !e.target.value && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
   };
 
+  // Verify OTP
   const handleVerify = (e) => {
     e.preventDefault();
 
     const enteredOtp = otp.join("");
 
-    // For frontend development:
-    // accept ANY 6-digit OTP
+    // Temporary frontend testing
     if (enteredOtp.length === 6) {
-      navigate("/reset-password");
+      navigate("/verification-success");
     }
   };
 
+  // Resend OTP
   const handleResend = () => {
+    // Prevent resend while cooldown is active
+    if (timeLeft > 0) {
+      return;
+    }
+
+    // Restart cooldown
     setTimeLeft(30);
+
+    // Clear existing OTP
+    setOtp(["", "", "", "", "", ""]);
+
+    // Focus first OTP input
+    inputRefs.current[0]?.focus();
+
+    // Show success toast
     setShowToast(true);
 
     setTimeout(() => {
@@ -74,10 +123,11 @@ const VerifyOtp = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-bg text-text">
+      {/* Header */}
       <AuthHeader
         rightContent={
           <p className="text-sm text-text-dim">
-            Already have an account?{" "}
+            Already verified?{" "}
             <Link
               to="/login"
               className="font-medium text-accent hover:underline">
@@ -87,40 +137,50 @@ const VerifyOtp = () => {
         }
       />
 
-      <main className="flex flex-1 items-center justify-center px-10 py-12">
-        <div className="w-full max-w-sm text-center">
-          {/* Icon */}
-          <div className="mx-auto flex h-17 w-17 items-center justify-center rounded-2xl border border-accent/20 bg-surface">
+      {/* Main */}
+      <main className="flex min-h-0 flex-1 items-center justify-center px-6 py-4">
+        <div className="-translate-y-4 w-full max-w-sm text-center">
+          {/* Email icon */}
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface">
             <Mail className="h-8 w-8 text-accent" strokeWidth={1.8} />
           </div>
 
           {/* Heading */}
-          <h1 className="mt-7 text-3xl font-semibold tracking-tight text-text">
-            Enter verification code
+          <h1 className="mt-6 text-3xl font-semibold tracking-tight text-text">
+            Check your email
           </h1>
 
+          {/* Email */}
+          <div className="mx-auto mt-4 inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
+            <Mail className="h-3.5 w-3.5 shrink-0 text-text-dim" />
+
+            <span className="max-w-[260px] truncate font-mono text-sm text-text">
+              akash2@gmail.com
+            </span>
+          </div>
+
           {/* Description */}
-          <p className="mx-auto mt-3 max-w-sm text-base leading-6 text-text-dim">
-            We sent a 6-digit code to{" "}
-            <span className="font-medium text-text">jo****@company.com</span>.
-            Enter it below to continue.
+          <p className="mx-auto mt-5 max-w-sm text-base leading-6 text-text-dim">
+            We've sent a 6-digit verification code to this address. Enter it
+            below to activate your vault and finish setting up your account.
           </p>
 
-          {/* OTP inputs */}
           <form onSubmit={handleVerify}>
-            <div className="mt-9 flex justify-center gap-2.5">
-              {[0, 1, 2, 3, 4, 5].map((index) => (
+            {/* OTP inputs */}
+            <div className="mt-7 flex justify-center gap-2.5">
+              {otp.map((value, index) => (
                 <input
                   key={index}
                   ref={(element) => {
                     inputRefs.current[index] = element;
                   }}
                   type="text"
-                  maxLength="1"
+                  maxLength={1}
                   inputMode="numeric"
                   pattern="[0-9]"
-                  value={otp[index]}
+                  value={value}
                   onChange={(e) => handleOtpChange(e, index)}
+                  onPaste={(e) => handleOtpPaste(e, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   className="h-14 w-12 rounded-lg border border-border bg-surface text-center font-mono text-xl text-text outline-none transition focus:border-accent focus:ring-3 focus:ring-accent/20"
                 />
@@ -153,17 +213,18 @@ const VerifyOtp = () => {
             </p>
           )}
 
-          {/* Back to login */}
-          <div className="mt-7">
+          {/* Back to registration */}
+          <div className="mt-6 border-t border-border pt-5">
             <Link
-              to="/forgot-password"
+              to="/register"
               className="text-sm text-text-dim transition hover:text-text">
-              ← Change email address
+              ← Back to registration
             </Link>
           </div>
         </div>
       </main>
 
+      {/* Footer */}
       <AuthFooter />
 
       {showToast && <Toast message="New verification code sent successfully" />}
@@ -171,4 +232,4 @@ const VerifyOtp = () => {
   );
 };
 
-export default VerifyOtp;
+export default VerifyEmailOtp;

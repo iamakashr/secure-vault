@@ -23,7 +23,7 @@ const ForgotPassword = () => {
       />
 
       <main className=" flex flex-1 items-center justify-center px-10 py-12">
-        <div className=" w-full max-w-md">
+        <div className=" w-full max-w-sm">
           {/* OTP icon */}
           <div className="mx-auto flex h-17 w-17 items-center justify-center rounded-2xl border border-accent/20 bg-surface">
             <MessageSquareCode

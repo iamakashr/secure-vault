@@ -96,7 +96,7 @@ const Register = () => {
     try {
       await registerUser(data);
 
-      navigate("/verify-email");
+      navigate("/verify-email-otp");
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -133,7 +133,7 @@ const Register = () => {
               <Link
                 to="/login"
                 className="font-medium text-accent hover:underline">
-                Login
+                Sign in
               </Link>
             </p>
           </div>
@@ -226,7 +226,7 @@ const Register = () => {
             <Link
               to="/login"
               className="font-medium text-accent hover:underline">
-              Login
+              Sign in
             </Link>
           </p>
         </div>

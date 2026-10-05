@@ -46,7 +46,7 @@ const Login = () => {
         <div className="w-full max-w-95">
           <div className="mb-8">
             <h2 className="text-2xl font-semibold tracking-tight text-text">
-              Login
+              Sign in
             </h2>
             <p className="mt-2 text-sm text-text-dim">
               New to SecureVault?{" "}

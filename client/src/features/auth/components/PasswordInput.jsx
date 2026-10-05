@@ -37,7 +37,7 @@ const PasswordInput = forwardRef(
             required={required}
             className={`w-full rounded-lg border bg-surface py-3 pl-4 pr-11 text-sm text-text outline-none transition placeholder:text-text-faint ${
               error
-                ? "!border-danger focus:!border-danger"
+                ? "border-danger! focus:border-danger!"
                 : "border-border focus:border-accent"
             }`}
           />

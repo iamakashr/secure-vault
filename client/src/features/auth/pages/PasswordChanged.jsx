@@ -22,7 +22,7 @@ const PasswordChanged = () => {
       />
 
       <main className="flex flex-1 items-center justify-center px-10 py-12">
-        <div className="w-full max-w-md text-center">
+        <div className="w-full max-w-sm text-center">
           {/* Success Icon */}
           <div className="mx-auto flex h-17 w-17 items-center justify-center rounded-2xl border border-good/20 bg-surface">
             <Check className="h-8 w-8 text-good" strokeWidth={1.8} />
