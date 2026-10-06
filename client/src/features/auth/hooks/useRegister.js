@@ -14,7 +14,12 @@ const useRegister = () => {
 
       return data;
     } catch (error) {
-      setError(error);
+      const message =
+        error.response?.data?.message ||
+        "Registration failed. Please try again.";
+
+      setError(message);
+
       throw error;
     } finally {
       setIsLoading(false);

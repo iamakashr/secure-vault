@@ -33,11 +33,29 @@ if (!process.env.REFRESH_TOKEN_EXPIRY) {
     "REFRESH_TOKEN_EXPIRY is not defined In the environment variable",
   );
 }
-if (!process.env.MAIL_USER) {
+/* if (!process.env.MAIL_USER) {
   throw new Error("MAIL_USER is not defined In the environment variable");
 }
 if (!process.env.MAIL_PASSWORD) {
   throw new Error("MAIL_PASSWORD is not defined In the environment variable");
+} */
+if (!process.env.GOOGLE_CLIENT_ID) {
+  throw new Error(
+    "GOOGLE_CLIENT_ID is not defined In the environment variable",
+  );
+}
+if (!process.env.GOOGLE_CLIENT_SECRET) {
+  throw new Error(
+    "GOOGLE_CLIENT_SECRET is not defined In the environment variable",
+  );
+}
+if (!process.env.GOOGLE_REFRESH_TOKEN) {
+  throw new Error(
+    "GOOGLE_REFRESH_TOKEN is not defined In the environment variable",
+  );
+}
+if (!process.env.GOOGLE_USER) {
+  throw new Error("GOOGLE_USER is not defined In the environment variable");
 }
 
 const config = {
@@ -48,8 +66,12 @@ const config = {
   ACCESS_TOKEN_EXPIRY: process.env.ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRY: process.env.REFRESH_TOKEN_EXPIRY,
-  MAIL_USER: process.env.MAIL_USER,
-  MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  // MAIL_USER: process.env.MAIL_USER,
+  // MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
+  GOOGLE_USER: process.env.GOOGLE_USER,
 };
 
 export default config;

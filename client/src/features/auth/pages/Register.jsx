@@ -96,7 +96,11 @@ const Register = () => {
     try {
       await registerUser(data);
 
-      navigate("/verify-email-otp");
+      navigate("/verify-email-otp", {
+        state: {
+          email: data.email,
+        },
+      });
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -195,9 +199,7 @@ const Register = () => {
             </div>
 
             {registerError && (
-              <p className="mb-4 text-sm text-weak">
-                Registration failed. Please try again.
-              </p>
+              <p className="mb-4 text-sm text-weak">{registerError}</p>
             )}
 
             <AuthButton type="submit" loading={isLoading}>

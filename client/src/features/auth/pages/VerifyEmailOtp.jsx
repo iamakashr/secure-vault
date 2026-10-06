@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
 
 import AuthHeader from "../components/AuthHeader";
@@ -7,8 +7,14 @@ import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
 import Toast from "../../../components/ui/Toast";
 
+import { verifyEmail } from "../../../services/authService.js";
+
 const VerifyEmailOtp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get email passed from registration page
+  const email = location.state?.email;
 
   const [timeLeft, setTimeLeft] = useState(30);
   const [showToast, setShowToast] = useState(false);
@@ -86,14 +92,30 @@ const VerifyEmailOtp = () => {
   };
 
   // Verify OTP
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
 
     const enteredOtp = otp.join("");
 
-    // Temporary frontend testing
-    if (enteredOtp.length === 6) {
+    // Don't send incomplete OTP
+    if (enteredOtp.length !== 6) {
+      return;
+    }
+
+    // Email is required for verification
+    if (!email) {
+      return;
+    }
+
+    try {
+      await verifyEmail({
+        email,
+        otp: enteredOtp,
+      });
+
       navigate("/verification-success");
+    } catch (error) {
+      console.error("Email verification failed:", error);
     }
   };
 
@@ -154,8 +176,8 @@ const VerifyEmailOtp = () => {
           <div className="mx-auto mt-4 inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-surface px-4 py-2">
             <Mail className="h-3.5 w-3.5 shrink-0 text-text-dim" />
 
-            <span className="max-w-[260px] truncate font-mono text-sm text-text">
-              akash2@gmail.com
+            <span className="max-w-65 truncate font-mono text-sm text-text">
+              {email}
             </span>
           </div>
 
