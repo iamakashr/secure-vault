@@ -1,0 +1,5 @@
+export const OTP_CONFIG = {
+  LENGTH: 6,
+  EXPIRY_MINUTES: 10,
+  RESEND_COOLDOWN_SECONDS: 30,
+};

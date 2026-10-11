@@ -1,4 +1,4 @@
-export const getVerificationOtpEmail = (otp) => {
+export const getVerificationOtpEmail = (otp, expiryMinutes) => {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -19,7 +19,7 @@ export const getVerificationOtpEmail = (otp) => {
         <h1>${otp}</h1>
 
         <p>
-          This code will expire in 10 minutes.
+          This code will expire in ${expiryMinutes} minutes.
         </p>
 
         <p>

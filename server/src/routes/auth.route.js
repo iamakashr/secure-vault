@@ -7,6 +7,6 @@ const authRouter = Router();
 
 authRouter.post("/register", authController.register);
 authRouter.post("/verify-email", authController.verifyEmail);
-
+authRouter.post("/resend-email-otp", authController.resendEmailOtp);
 
 export default authRouter;

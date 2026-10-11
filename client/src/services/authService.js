@@ -16,11 +16,10 @@ export const verifyEmail = async (verificationData) => {
   return response.data;
 };
 
-export const resendVerificationOtp = async (email) => {
-  const response = await apiClient.post(
-    API_ENDPOINT.AUTH.RESEND_VERIFICATION_OTP,
-    { email },
-  );
+export const resendEmailOtp = async (email) => {
+  const response = await apiClient.post(API_ENDPOINT.AUTH.RESEND_EMAIL_OTP, {
+    email,
+  });
 
   return response.data;
 };

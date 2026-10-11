@@ -7,8 +7,12 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { sendEmail } from "../utils/send-email.js";
 import { generateOtp, hashOtp } from "../utils/otp.js";
 
-import { registerSchema } from "../validators/auth.validator.js";
+import {
+  registerSchema,
+  resendEmailOtpSchema,
+} from "../validators/auth.validator.js";
 import { getVerificationOtpEmail } from "../templates/verificationOtp.template.js";
+import { OTP_CONFIG } from "../constants/auth.constants.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -79,15 +83,15 @@ const register = asyncHandler(async (req, res) => {
     email: user.email,
     user: user._id,
     otpHash,
-    expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    expiresAt: new Date(Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000),
   });
 
   // 7. Send OTP to user's email
   await sendEmail({
     to: user.email,
     subject: "Verify your SecureVault account",
-    text: `Your SecureVault verification code is ${otp}. It expires in 10 minutes.`,
-    html: getVerificationOtpEmail(otp),
+    text: `Your SecureVault verification code is ${otp}. It expires in ${OTP_CONFIG.EXPIRY_MINUTES} minutes.`,
+    html: getVerificationOtpEmail(otp, OTP_CONFIG.EXPIRY_MINUTES),
   });
 
   // 8. Return safe user data
@@ -165,12 +169,14 @@ const verifyEmail = asyncHandler(async (req, res) => {
   );
 });
 
-/* const resendVerificationOtp = asyncHandler(async (req, res) => {
-  const email = req.body.email?.trim().toLowerCase();
+const resendEmailOtp = asyncHandler(async (req, res) => {
+  const result = resendEmailOtpSchema.safeParse(req.body);
 
-  if (!email) {
-    throw new ApiError(400, "Email is required");
+  if (!result.success) {
+    throw new ApiError(400, "Please enter a valid email address");
   }
+
+  const { email } = result.data;
 
   const user = await User.findOne({ email });
 
@@ -182,49 +188,47 @@ const verifyEmail = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Email is already verified");
   }
 
-  // Check resend cooldown
-  const latestOtp = await Otp.findOne({
-    user: user._id,
-  }).sort({ createdAt: -1 });
+  const existingOtp = await Otp.findOne({ email });
 
-  if (latestOtp && Date.now() - latestOtp.createdAt.getTime() < 30 * 1000) {
-    throw new ApiError(429, "Please wait before requesting another code");
+  if (existingOtp) {
+    const elapsedTime = Date.now() - existingOtp.updatedAt.getTime();
+
+    if (elapsedTime < OTP_CONFIG.RESEND_COOLDOWN_SECONDS * 1000) {
+      throw new ApiError(429, "Please wait before requesting another OTP");
+    }
   }
 
-  // Generate new OTP
   const otp = generateOtp();
   const otpHash = hashOtp(otp);
 
-  // Remove previous OTP
-  await Otp.deleteMany({
-    user: user._id,
-  });
+  const expiresAt = new Date(
+    Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000,
+  );
 
-  // Create new OTP
-  await Otp.create({
-    email: user.email,
-    user: user._id,
-    otpHash,
-    expiresAt: new Date(Date.now() + 10 * 60 * 1000),
-  });
+  if (existingOtp) {
+    existingOtp.otpHash = otpHash;
+    existingOtp.expiresAt = expiresAt;
 
-  // Send new OTP email
+    await existingOtp.save();
+  } else {
+    await Otp.create({
+      email,
+      user: user._id,
+      otpHash,
+      expiresAt,
+    });
+  }
+
   await sendEmail({
-    to: user.email,
-    subject: "Your new SecureVault verification code",
-    text: `Your new SecureVault verification code is ${otp}. It expires in 10 minutes.`,
-    html: getVerificationOtpEmail(otp),
+    to: email,
+    subject: "Verify your email",
+    html: getVerificationOtpEmail(otp, OTP_CONFIG.EXPIRY_MINUTES),
+    text: `Your verification code is ${otp}. It expires in ${OTP_CONFIG.EXPIRY_MINUTES} minutes.`,
   });
 
   return res
     .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        null,
-        "A new verification code has been sent to your email.",
-      ),
-    );
-}); */
+    .json(new ApiResponse(200, {}, "A new verification OTP has been sent"));
+});
 
-export { register, verifyEmail };
+export { register, verifyEmail, resendEmailOtp };

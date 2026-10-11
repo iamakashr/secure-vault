@@ -3,7 +3,7 @@ export const API_ENDPOINT = {
     LOGIN: "auth/login",
     REGISTER: "auth/register",
     VERIFY_EMAIL: "auth/verify-email",
-    RESEND_VERIFICATION_OTP: "auth/resend-verification-otp",
+    RESEND_EMAIL_OTP: "auth/resend-email-otp",
     VERIFICATION_SUCCESSFULL: "auth/verification-success",
     FORGOT_PASSWORD: "auth/forgot-password",
     VERIFY_OTP: "auth/verify-otp",

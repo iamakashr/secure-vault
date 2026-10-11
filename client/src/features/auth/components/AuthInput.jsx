@@ -46,7 +46,7 @@ const AuthInput = forwardRef(
               Icon ? "pl-10 pr-4" : "px-4"
             } ${
               error
-                ? "!border-danger focus:!border-danger"
+                ? "border-danger! focus:border-danger!"
                 : "border-border focus:border-accent"
             }`}
           />
