@@ -4,12 +4,15 @@ import cors from "cors";
 import config from "./config/config.js";
 import authRouter from "./routes/auth.route.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+
+app.use(cookieParser());
 
 app.use(
   cors({

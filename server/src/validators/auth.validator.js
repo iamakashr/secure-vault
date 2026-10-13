@@ -17,3 +17,8 @@ export const registerSchema = z.object({
 export const resendEmailOtpSchema = z.object({
   email: emailRules,
 });
+
+export const loginSchema = z.object({
+  email: emailRules,
+  password: z.string().min(1, "Password is required"),
+});

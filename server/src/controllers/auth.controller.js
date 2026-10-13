@@ -10,6 +10,7 @@ import { generateOtp, hashOtp } from "../utils/otp.js";
 import {
   registerSchema,
   resendEmailOtpSchema,
+  loginSchema,
 } from "../validators/auth.validator.js";
 import { getVerificationOtpEmail } from "../templates/verificationOtp.template.js";
 import { OTP_CONFIG } from "../constants/auth.constants.js";
@@ -231,4 +232,56 @@ const resendEmailOtp = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "A new verification OTP has been sent"));
 });
 
-export { register, verifyEmail, resendEmailOtp };
+const login = asyncHandler(async (req, res) => {
+  const result = loginSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, "Validation failed");
+  }
+
+  const { email, password } = result.data;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+  const isPasswordValid = await user.isPasswordCorrect(password);
+
+  if (!isPasswordValid) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  if (!user.isEmailVerified) {
+    throw new ApiError(403, "Please verify your email before logging in");
+  }
+
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+    user._id,
+  );
+
+  const loggedInUser = await User.findById(user._id).select(
+    "-password -refreshToken -emailVerificationToken -emailVerificationExpiry",
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        {
+          user: loggedInUser,
+        },
+        "User logged in Successfully",
+      ),
+    );
+});
+
+export { register, verifyEmail, resendEmailOtp, login };

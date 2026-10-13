@@ -22,10 +22,10 @@ export const sendEmail = async ({ to, subject, text, html }) => {
     html,
   });
 
-  console.log("Email accepted:", info.accepted);
+  /* console.log("Email accepted:", info.accepted);
   console.log("Email rejected:", info.rejected);
   console.log("Message ID:", info.messageId);
-  console.log("Response:", info.response);
+  console.log("Response:", info.response); */
 
   return info;
 };
