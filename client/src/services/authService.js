@@ -23,3 +23,8 @@ export const resendEmailOtp = async (email) => {
 
   return response.data;
 };
+
+export const login = async (userData) => {
+  const response = await apiClient.post(API_ENDPOINT.AUTH.LOGIN, userData);
+  return response.data;
+};
