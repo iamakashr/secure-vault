@@ -22,3 +22,17 @@ export const loginSchema = z.object({
   email: emailRules,
   password: z.string().min(1, "Password is required"),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: emailRules,
+});
+
+export const verifyResetOtpSchema = z.object({
+  email: emailRules,
+  otp: z.string().regex(/^\d{6}$/, "Please enter a valid 6-digit OTP"),
+});
+
+export const resetPasswordSchema = z.object({
+  email: emailRules,
+  newPassword: z.string().min(8, "Password must be at least 8 characters long"),
+});

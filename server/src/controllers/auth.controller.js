@@ -5,15 +5,19 @@ import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { sendEmail } from "../utils/send-email.js";
-import { generateOtp, hashOtp } from "../utils/otp.js";
+import { generateOtp, hashOtp, verifyOtp } from "../utils/otp.js";
 
 import {
   registerSchema,
   resendEmailOtpSchema,
   loginSchema,
+  forgotPasswordSchema,
+  verifyResetOtpSchema,
+  resetPasswordSchema,
 } from "../validators/auth.validator.js";
 import { getVerificationOtpEmail } from "../templates/verificationOtp.template.js";
 import { OTP_CONFIG } from "../constants/auth.constants.js";
+import crypto from "node:crypto";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -284,4 +288,160 @@ const login = asyncHandler(async (req, res) => {
     );
 });
 
-export { register, verifyEmail, resendEmailOtp, login };
+const forgotPassword = asyncHandler(async (req, res) => {
+  const result = forgotPasswordSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, "Invalid email address");
+  }
+
+  const { email } = result.data;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new ApiError(404, "Email does not exist");
+  }
+
+  if (!user.isEmailVerified) {
+    throw new ApiError(
+      403,
+      "Please verify your email before resetting your password.",
+    );
+  }
+
+  const otp = generateOtp();
+  const otpHash = hashOtp(otp);
+
+  const expiresAt = new Date(
+    Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000,
+  );
+
+  const existingOtp = await Otp.findOne({ email });
+
+  if (existingOtp) {
+    existingOtp.otpHash = otpHash;
+    existingOtp.expiresAt = expiresAt;
+    await existingOtp.save();
+  } else {
+    await Otp.create({
+      email,
+      user: user._id,
+      otpHash,
+      expiresAt,
+    });
+  }
+
+  await sendEmail({
+    to: email,
+    subject: "Reset Your Password",
+    html: getVerificationOtpEmail(otp, OTP_CONFIG.EXPIRY_MINUTES),
+    text: `Your password reset code is ${otp}. It expires in ${OTP_CONFIG.EXPIRY_MINUTES} minutes.`,
+  });
+
+  return res.status(200).json({
+    success: true,
+    message:
+      "If an account with this email exists, you will receive a password reset OTP.",
+  });
+});
+
+const verifyResetOtp = asyncHandler(async (req, res) => {
+  const result = verifyResetOtpSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, "Invalid email or OTP format");
+  }
+
+  const { email, otp } = result.data;
+
+  const user = await User.findOne({ email });
+
+  if (!user || !user.isEmailVerified) {
+    throw new ApiError(400, "Invalid or expired OTP");
+  }
+
+  const existingOtp = await Otp.findOne({ email });
+
+  if (!existingOtp || existingOtp.expiresAt <= new Date()) {
+    throw new ApiError(400, "Invalid or expired OTP");
+  }
+
+  const isOtpValid = verifyOtp(otp, existingOtp.otpHash);
+
+  if (!isOtpValid) {
+    throw new ApiError(400, "Invalid or expired OTP");
+  }
+
+  const { unHashedToken, hashedToken, tokenExpiry } =
+    user.generateTemporaryToken();
+
+  user.forgotPasswordToken = hashedToken;
+  user.forgotPasswordExpiry = tokenExpiry;
+
+  await user.save({ validateBeforeSave: false });
+
+  await Otp.deleteOne({ _id: existingOtp._id });
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        { resetToken: unHashedToken },
+        "OTP verified successfully",
+      ),
+    );
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const result = resetPasswordSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, "Please enter a valid email and password");
+  }
+
+  const { email, newPassword } = result.data;
+  const { resetToken } = req.body;
+
+  if (!resetToken) {
+    throw new ApiError(400, "Password reset token is required");
+  }
+
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    email,
+    forgotPasswordToken: hashedToken,
+    forgotPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new ApiError(400, "Invalid or expired password reset token");
+  }
+
+  user.password = newPassword;
+  user.forgotPasswordToken = undefined;
+  user.forgotPasswordExpiry = undefined;
+
+  await user.save();
+
+  await Otp.deleteOne({ email });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password reset successfully"));
+});
+
+export {
+  register,
+  verifyEmail,
+  resendEmailOtp,
+  login,
+  forgotPassword,
+  verifyResetOtp,
+  resetPassword,
+};
