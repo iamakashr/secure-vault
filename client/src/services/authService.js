@@ -28,3 +28,10 @@ export const login = async (userData) => {
   const response = await apiClient.post(API_ENDPOINT.AUTH.LOGIN, userData);
   return response.data;
 };
+export const forgotPassword = async (userData) => {
+  const response = await apiClient.post(
+    API_ENDPOINT.AUTH.FORGOT_PASSWORD,
+    userData,
+  );
+  return response.data;
+};

@@ -1,14 +1,43 @@
-import { Link } from "react-router-dom";
-import { Mail, MessageSquareCode, Shield } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, MessageSquareCode } from "lucide-react";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
 import AuthInput from "../components/AuthInput";
 
+import { forgotPasswordSchema } from "../schemas/authSchema.js";
+import useForgotPassword from "../hooks/useForgotPassword.js";
+
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+  const { forgotPassword, isLoading, error } = useForgotPassword();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const onSubmit = async (userData) => {
+    try {
+      await forgotPassword(userData);
+      navigate("/verify-email-otp");
+    } catch (error) {
+      console.error("Forgot password failed:", error);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen flex-col  bg-bg text-text">
+    <div className="flex min-h-screen flex-col bg-bg text-text">
       <AuthHeader
         rightContent={
           <p className="text-sm text-text-dim">
@@ -22,8 +51,8 @@ const ForgotPassword = () => {
         }
       />
 
-      <main className=" flex flex-1 items-center justify-center px-10 py-12">
-        <div className=" w-full max-w-sm">
+      <main className="flex flex-1 items-center justify-center px-10 py-12">
+        <div className="w-full max-w-sm">
           {/* OTP icon */}
           <div className="mx-auto flex h-17 w-17 items-center justify-center rounded-2xl border border-accent/20 bg-surface">
             <MessageSquareCode
@@ -43,26 +72,37 @@ const ForgotPassword = () => {
             code to reset it.
           </p>
 
-          {/* Email */}
-          <div className="mt-9">
-            <AuthInput
-              id="email"
-              name="email"
-              type="email"
-              label="Email"
-              placeholder="you@company.com"
-              autoComplete="email"
-              icon={Mail}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            {/* Email */}
+            <div className="mt-9">
+              <AuthInput
+                id="email"
+                name="email"
+                type="email"
+                label="Email"
+                placeholder="you@company.com"
+                autoComplete="email"
+                error={errors.email?.message}
+                {...register("email")}
+                icon={Mail}
+                required
+              />
+            </div>
 
-          {/* Send OTP */}
-          <div className="mt-5">
-            <Link to="/verify-otp" className="block">
-              <AuthButton type="button">Send OTP</AuthButton>
-            </Link>
-          </div>
+            {/* Backend error */}
+            {error && (
+              <p className="mt-3 text-sm text-weak" role="alert">
+                {error}
+              </p>
+            )}
+
+            {/* Send OTP */}
+            <div className="mt-5">
+              <AuthButton type="submit" disabled={isLoading}>
+                {isLoading ? "Sending..." : "Send OTP"}
+              </AuthButton>
+            </div>
+          </form>
 
           {/* Back to login */}
           <div className="mt-7 text-center">
