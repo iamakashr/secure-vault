@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail } from "lucide-react";
 
 import AuthHeader from "../components/AuthHeader";
@@ -7,8 +7,15 @@ import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
 import Toast from "../../../components/ui/Toast";
 
+import {
+  verifyResetOtp,
+  resendResetOtp,
+} from "../../../services/authService.js";
+
 const VerifyOtp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
 
   const [timeLeft, setTimeLeft] = useState(30);
   const [showToast, setShowToast] = useState(false);
@@ -51,25 +58,54 @@ const VerifyOtp = () => {
     }
   };
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
 
     const enteredOtp = otp.join("");
 
-    // For frontend development:
-    // accept ANY 6-digit OTP
-    if (enteredOtp.length === 6) {
-      navigate("/reset-password");
+    if (enteredOtp.length !== 6 || !email) {
+      return;
+    }
+
+    try {
+      const response = await verifyResetOtp({
+        email,
+        otp: enteredOtp,
+      });
+
+      const resetToken = response.data?.resetToken;
+
+      if (!resetToken) {
+        console.error("Reset token was not returned by the server.");
+        return;
+      }
+
+      navigate("/reset-password", {
+        state: { email, resetToken },
+      });
+    } catch (error) {
+      console.error(error.response?.data?.message || "OTP verification failed");
     }
   };
 
-  const handleResend = () => {
-    setTimeLeft(30);
-    setShowToast(true);
+  const handleResend = async () => {
+    if (!email || timeLeft > 0) {
+      return;
+    }
 
-    setTimeout(() => {
-      setShowToast(false);
-    }, 2500);
+    try {
+      await resendResetOtp(email);
+
+      setOtp(["", "", "", "", "", ""]);
+      setTimeLeft(30);
+      setShowToast(true);
+
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2500);
+    } catch (error) {
+      console.error(error.response?.data?.message || "Failed to resend OTP");
+    }
   };
 
   return (
@@ -102,8 +138,10 @@ const VerifyOtp = () => {
           {/* Description */}
           <p className="mx-auto mt-3 max-w-sm text-base leading-6 text-text-dim">
             We sent a 6-digit code to{" "}
-            <span className="font-medium text-text">jo****@company.com</span>.
-            Enter it below to continue.
+            <span className="font-medium text-text">
+              {email || "your email address"}
+            </span>
+            . Enter it below to continue.
           </p>
 
           {/* OTP inputs */}

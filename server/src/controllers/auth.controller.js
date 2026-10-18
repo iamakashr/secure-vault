@@ -13,6 +13,7 @@ import {
   loginSchema,
   forgotPasswordSchema,
   verifyResetOtpSchema,
+  resendResetOtpSchema,
   resetPasswordSchema,
 } from "../validators/auth.validator.js";
 import { getVerificationOtpEmail } from "../templates/verificationOtp.template.js";
@@ -87,6 +88,7 @@ const register = asyncHandler(async (req, res) => {
   await Otp.create({
     email: user.email,
     user: user._id,
+    purpose: "email-verification",
     otpHash,
     expiresAt: new Date(Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000),
   });
@@ -129,6 +131,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
 
   const otpRecord = await Otp.findOne({
     email,
+    purpose: "email-verification",
   });
 
   if (!otpRecord) {
@@ -193,7 +196,10 @@ const resendEmailOtp = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Email is already verified");
   }
 
-  const existingOtp = await Otp.findOne({ email });
+  const existingOtp = await Otp.findOne({
+    email,
+    purpose: "email-verification",
+  });
 
   if (existingOtp) {
     const elapsedTime = Date.now() - existingOtp.updatedAt.getTime();
@@ -219,6 +225,7 @@ const resendEmailOtp = asyncHandler(async (req, res) => {
     await Otp.create({
       email,
       user: user._id,
+      purpose: "email-verification",
       otpHash,
       expiresAt,
     });
@@ -317,7 +324,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000,
   );
 
-  const existingOtp = await Otp.findOne({ email });
+  const existingOtp = await Otp.findOne({ email, purpose: "password-reset" });
 
   if (existingOtp) {
     existingOtp.otpHash = otpHash;
@@ -327,6 +334,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     await Otp.create({
       email,
       user: user._id,
+      purpose: "password-reset",
       otpHash,
       expiresAt,
     });
@@ -361,7 +369,7 @@ const verifyResetOtp = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid or expired OTP");
   }
 
-  const existingOtp = await Otp.findOne({ email });
+  const existingOtp = await Otp.findOne({ email, purpose: "password-reset" });
 
   if (!existingOtp || existingOtp.expiresAt <= new Date()) {
     throw new ApiError(400, "Invalid or expired OTP");
@@ -392,6 +400,71 @@ const verifyResetOtp = asyncHandler(async (req, res) => {
         "OTP verified successfully",
       ),
     );
+});
+
+const resendResetOtp = asyncHandler(async (req, res) => {
+  const result = resendResetOtpSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, "Please enter a valid email address");
+  }
+
+  const { email } = result.data;
+
+  const user = await User.findOne({ email });
+
+  if (!user || !user.isEmailVerified) {
+    throw new ApiError(
+      400,
+      "Unable to resend the password reset OTP for this account",
+    );
+  }
+
+  const existingOtp = await Otp.findOne({
+    email,
+    purpose: "password-reset",
+  });
+
+  if (existingOtp) {
+    const elapsedTime = Date.now() - existingOtp.updatedAt.getTime();
+
+    if (elapsedTime < OTP_CONFIG.RESEND_COOLDOWN_SECONDS * 1000) {
+      throw new ApiError(429, "Please wait before requesting another OTP");
+    }
+  }
+
+  const otp = generateOtp();
+  const otpHash = hashOtp(otp);
+
+  const expiresAt = new Date(
+    Date.now() + OTP_CONFIG.EXPIRY_MINUTES * 60 * 1000,
+  );
+
+  if (existingOtp) {
+    existingOtp.otpHash = otpHash;
+    existingOtp.expiresAt = expiresAt;
+
+    await existingOtp.save();
+  } else {
+    await Otp.create({
+      email,
+      user: user._id,
+      purpose: "password-reset",
+      otpHash,
+      expiresAt,
+    });
+  }
+
+  await sendEmail({
+    to: email,
+    subject: "Reset Your SecureVault Password",
+    text: `Your password reset code is ${otp}. It expires in ${OTP_CONFIG.EXPIRY_MINUTES} minutes.`,
+    html: getVerificationOtpEmail(otp, OTP_CONFIG.EXPIRY_MINUTES),
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "A new password-reset OTP has been sent"));
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
@@ -429,7 +502,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   await user.save();
 
-  await Otp.deleteOne({ email });
+  await Otp.deleteOne({ email, purpose: "password-reset" });
 
   return res
     .status(200)
@@ -443,5 +516,6 @@ export {
   login,
   forgotPassword,
   verifyResetOtp,
+  resendResetOtp,
   resetPassword,
 };

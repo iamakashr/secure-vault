@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LockKeyhole } from "lucide-react";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
@@ -8,20 +11,66 @@ import AuthButton from "../components/AuthButton";
 import PasswordInput from "../components/PasswordInput";
 import PasswordStrength from "../components/PasswordStrength";
 
+import { resetPasswordSchema } from "../schemas/authSchema.js";
+import useResetPassword from "../hooks/useResetPassword.js";
+
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const location = useLocation();
+
+  const { email, resetToken } = location.state || {};
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const { resetPassword, isLoading, error } = useResetPassword();
 
-    navigate("/password-changed");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(resetPasswordSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const password = watch("password");
+
+  const onSubmit = async (formData) => {
+    console.log("Reset password form submitted");
+
+    if (!email || !resetToken) {
+      console.error("Email or reset token is missing", {
+        emailExists: Boolean(email),
+        resetTokenExists: Boolean(resetToken),
+      });
+      return;
+    }
+
+    try {
+      const response = await resetPassword({
+        email,
+        newPassword: formData.password,
+        resetToken,
+      });
+
+      console.log("Password reset response:", response);
+      navigate("/password-changed");
+    } catch (error) {
+      console.error(
+        "Password reset failed:",
+        error.response?.data || error.message,
+      );
+    }
+  };
+
+  const onInvalid = (formErrors) => {
+    console.log("Form validation errors:", formErrors);
   };
 
   return (
@@ -57,7 +106,7 @@ const ResetPassword = () => {
           </p>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-9">
+          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mt-9">
             {/* New password */}
             <div
               onFocus={() => setIsPasswordFocused(true)}
@@ -68,15 +117,16 @@ const ResetPassword = () => {
               }}>
               <PasswordInput
                 id="password"
-                name="password"
                 label="New password"
                 placeholder="Enter a new password"
                 autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 required
                 showPassword={showPassword}
-                onToggleVisibility={() => setShowPassword(!showPassword)}
+                onToggleVisibility={() =>
+                  setShowPassword((previous) => !previous)
+                }
+                {...register("password")}
+                error={errors.password?.message}
               />
 
               {isPasswordFocused && <PasswordStrength password={password} />}
@@ -86,23 +136,31 @@ const ResetPassword = () => {
             <div className="mt-3">
               <PasswordInput
                 id="confirmPassword"
-                name="confirmPassword"
                 label="Re-enter password"
                 placeholder="Re-enter your new password"
                 autoComplete="new-password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 showPassword={showConfirmPassword}
                 onToggleVisibility={() =>
-                  setShowConfirmPassword(!showConfirmPassword)
+                  setShowConfirmPassword((previous) => !previous)
                 }
+                {...register("confirmPassword")}
+                error={errors.confirmPassword?.message}
               />
             </div>
 
+            {/* Backend error */}
+            {error && (
+              <p className="mt-3 text-sm text-weak" role="alert">
+                {error}
+              </p>
+            )}
+
             {/* Reset button */}
             <div className="mt-7">
-              <AuthButton type="submit">Reset password</AuthButton>
+              <AuthButton type="submit" disabled={isLoading}>
+                {isLoading ? "Resetting..." : "Reset password"}
+              </AuthButton>
             </div>
           </form>
 

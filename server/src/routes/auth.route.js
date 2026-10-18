@@ -11,6 +11,7 @@ authRouter.post("/resend-email-otp", authController.resendEmailOtp);
 authRouter.post("/login", authController.login);
 authRouter.post("/forgot-password", authController.forgotPassword);
 authRouter.post("/verify-resetOtp", authController.verifyResetOtp);
+authRouter.post("/resend-reset-otp", authController.resendResetOtp);
 authRouter.post("/reset-password", authController.resetPassword);
 
 export default authRouter;

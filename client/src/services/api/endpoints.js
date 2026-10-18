@@ -8,6 +8,8 @@ export const API_ENDPOINT = {
     FORGOT_PASSWORD: "auth/forgot-password",
     VERIFY_OTP: "auth/verify-otp",
     RESET_PASSWORD: "auth/reset-password",
+    VERIFY_RESET_OTP: "auth/verify-resetOtp",
+    RESEND_RESET_OTP: "auth/resend-reset-otp",
     PASSWORD_CHANGED: "auth/password-changed",
   },
 };

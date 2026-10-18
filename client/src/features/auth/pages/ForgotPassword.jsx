@@ -30,7 +30,10 @@ const ForgotPassword = () => {
   const onSubmit = async (userData) => {
     try {
       await forgotPassword(userData);
-      navigate("/verify-email-otp");
+
+      navigate("/verify-otp", {
+        state: { email: userData.email },
+      });
     } catch (error) {
       console.error("Forgot password failed:", error);
     }
