@@ -11,5 +11,6 @@ export const API_ENDPOINT = {
     VERIFY_RESET_OTP: "auth/verify-resetOtp",
     RESEND_RESET_OTP: "auth/resend-reset-otp",
     PASSWORD_CHANGED: "auth/password-changed",
+    ME: "auth/me",
   },
 };

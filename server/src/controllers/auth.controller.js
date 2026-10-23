@@ -509,6 +509,17 @@ const resetPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "Password reset successfully"));
 });
 
+const getMe = asyncHandler(async (req, res) => {
+  return res.status(200).json({
+    success: true,
+    user: {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+    },
+  });
+});
+
 export {
   register,
   verifyEmail,
@@ -518,4 +529,5 @@ export {
   verifyResetOtp,
   resendResetOtp,
   resetPassword,
+  getMe,
 };
