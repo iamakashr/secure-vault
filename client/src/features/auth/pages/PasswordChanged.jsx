@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Check, Shield } from "lucide-react";
-
+import { PATHS } from "../../../config/paths.js";
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
@@ -13,7 +13,7 @@ const PasswordChanged = () => {
           <p className="text-sm text-text-dim">
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to={PATHS.AUTH.REGISTER}
               className="font-medium text-accent hover:underline">
               Sign up
             </Link>
@@ -44,7 +44,7 @@ const PasswordChanged = () => {
 
           {/* Login Button */}
           <div className="mt-9">
-            <Link to="/login" className="block">
+            <Link to={PATHS.AUTH.LOGIN} className="block">
               <AuthButton type="button">Continue to login</AuthButton>
             </Link>
           </div>

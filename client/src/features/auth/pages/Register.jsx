@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserRound, Mail } from "lucide-react";
+import { PATHS } from "../../../config/paths.js";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -96,7 +97,7 @@ const Register = () => {
     try {
       await registerUser(data);
 
-      navigate("/verify-email-otp", {
+      navigate(PATHS.AUTH.VERIFY_EMAIL_OTP, {
         state: {
           email: data.email,
         },
@@ -135,7 +136,7 @@ const Register = () => {
             <p className="mt-2 text-sm text-text-dim">
               Already protecting your passwords?{" "}
               <Link
-                to="/login"
+                to={PATHS.AUTH.LOGIN}
                 className="font-medium text-accent hover:underline">
                 Sign in
               </Link>
@@ -226,7 +227,7 @@ const Register = () => {
           <p className="mt-8 text-center text-sm text-text-dim">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to={PATHS.AUTH.LOGIN}
               className="font-medium text-accent hover:underline">
               Sign in
             </Link>

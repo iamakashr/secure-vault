@@ -1,5 +1,6 @@
 import { Routes, Route, useOutletContext } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import { PATHS } from "../config/paths.js";
 
 const DashboardPlaceholder = () => {
   const { user } = useOutletContext();
@@ -21,7 +22,7 @@ const DashboardRoutes = () => {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard" element={<DashboardPlaceholder />} />
+        <Route path={PATHS.DASHBOARD.HOME}  element={<DashboardPlaceholder />} />
       </Route>
     </Routes>
   );

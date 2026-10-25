@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { PATHS } from "../config/paths.js";
 import AuthLayout from "../layouts/AuthLayout";
 import Register from "../features/auth/pages/Register";
 import Login from "../features/auth/pages/Login";
@@ -12,15 +13,16 @@ import VerifyEmailOtp from "../features/auth/pages/VerifyEmailOtp";
 const AuthRoutes = () => {
   return (
     <Routes>
-      <Route element={<AuthLayout />}>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/verify-email-otp" element={<VerifyEmailOtp />} />
-        <Route path="/verification-success" element={<VerificationSuccess />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/password-changed" element={<PasswordChanged />} />
+      <Route path={PATHS.AUTH.BASE} element={<AuthLayout />}>
+        <Route index element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="login" element={<Login />} />
+        <Route path="verify-email-otp" element={<VerifyEmailOtp />} />
+        <Route path="verification-success" element={<VerificationSuccess />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="verify-otp" element={<VerifyOtp />} />
+        <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="password-changed" element={<PasswordChanged />} />
       </Route>
     </Routes>
   );

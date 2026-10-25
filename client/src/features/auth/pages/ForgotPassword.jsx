@@ -1,6 +1,6 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, MessageSquareCode } from "lucide-react";
-
+import { PATHS } from "../../../config/paths.js";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -14,6 +14,10 @@ import useForgotPassword from "../hooks/useForgotPassword.js";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const message = location.state?.message;
+
   const { forgotPassword, isLoading, error } = useForgotPassword();
 
   const {
@@ -31,7 +35,7 @@ const ForgotPassword = () => {
     try {
       await forgotPassword(userData);
 
-      navigate("/verify-otp", {
+      navigate(PATHS.AUTH.VERIFY_OTP, {
         state: { email: userData.email },
       });
     } catch (error) {
@@ -46,7 +50,7 @@ const ForgotPassword = () => {
           <p className="text-sm text-text-dim">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to={PATHS.AUTH.LOGIN}
               className="font-medium text-accent hover:underline">
               Sign in
             </Link>
@@ -74,6 +78,13 @@ const ForgotPassword = () => {
             Enter the email linked to your account and we'll send a one-time
             code to reset it.
           </p>
+
+          {/* Redirect message */}
+          {message && (
+            <p className="mt-4 text-sm text-text-dim" role="status">
+              {message}
+            </p>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             {/* Email */}
@@ -110,7 +121,7 @@ const ForgotPassword = () => {
           {/* Back to login */}
           <div className="mt-7 text-center">
             <Link
-              to="/login"
+              to={PATHS.AUTH.LOGIN}
               className="text-sm text-text-dim transition hover:text-text">
               ← Back to login
             </Link>

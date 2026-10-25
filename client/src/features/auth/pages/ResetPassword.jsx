@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { LockKeyhole } from "lucide-react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { PATHS } from "../../../config/paths.js";
 
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
@@ -41,36 +42,47 @@ const ResetPassword = () => {
 
   const password = watch("password");
 
-  const onSubmit = async (formData) => {
-    console.log("Reset password form submitted");
-
+  // Redirect if the required reset information is missing.
+  useEffect(() => {
     if (!email || !resetToken) {
-      console.error("Email or reset token is missing", {
-        emailExists: Boolean(email),
-        resetTokenExists: Boolean(resetToken),
+      navigate(PATHS.AUTH.FORGOT_PASSWORD, {
+        replace: true,
+        state: {
+          message:
+            "Your password reset session is missing. Please request a new verification code.",
+        },
+      });
+    }
+  }, [email, resetToken, navigate]);
+
+  const onSubmit = async (formData) => {
+    // Prevent submission if reset information is unavailable.
+    if (!email || !resetToken) {
+      navigate(PATHS.AUTH.FORGOT_PASSWORD, {
+        replace: true,
+        state: {
+          message:
+            "Please request a new verification code to reset your password.",
+        },
       });
       return;
     }
 
     try {
-      const response = await resetPassword({
+      await resetPassword({
         email,
         newPassword: formData.password,
         resetToken,
       });
 
-      console.log("Password reset response:", response);
-      navigate("/password-changed");
+      navigate(PATHS.AUTH.PASSWORD_CHANGED, { replace: true });
     } catch (error) {
+      // The hook exposes the backend error through `error`.
       console.error(
         "Password reset failed:",
         error.response?.data || error.message,
       );
     }
-  };
-
-  const onInvalid = (formErrors) => {
-    console.log("Form validation errors:", formErrors);
   };
 
   return (
@@ -80,7 +92,7 @@ const ResetPassword = () => {
           <p className="text-sm text-text-dim">
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to={PATHS.AUTH.REGISTER}
               className="font-medium text-accent hover:underline">
               Sign up
             </Link>
@@ -106,7 +118,7 @@ const ResetPassword = () => {
           </p>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="mt-9">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-9">
             {/* New password */}
             <div
               onFocus={() => setIsPasswordFocused(true)}
@@ -167,7 +179,7 @@ const ResetPassword = () => {
           {/* Return to login */}
           <div className="mt-7 text-center">
             <Link
-              to="/login"
+              to={PATHS.AUTH.LOGIN}
               className="text-sm text-text-dim transition hover:text-text">
               ← Return to login
             </Link>

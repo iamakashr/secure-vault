@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
+import { PATHS } from "../../../config/paths.js";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -71,7 +72,7 @@ const Login = () => {
     try {
       await loginUser(data);
 
-      navigate("/dashboard");
+      navigate(PATHS.DASHBOARD.HOME);
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -106,7 +107,7 @@ const Login = () => {
             <p className="mt-2 text-sm text-text-dim">
               New to SecureVault?{" "}
               <Link
-                to="/register"
+                to={PATHS.AUTH.REGISTER}
                 className="font-medium text-accent hover:underline">
                 Create an account
               </Link>
@@ -147,7 +148,7 @@ const Login = () => {
             />
 
             {loginError && (
-              <p className="mb-4 text-sm text-weak" role="alert">
+              <p className="mb-4 text-sm text-danger" role="alert">
                 {loginError}
               </p>
             )}
@@ -166,7 +167,7 @@ const Login = () => {
               </label>
 
               <Link
-                to="/forgot-password"
+                to={PATHS.AUTH.FORGOT_PASSWORD}
                 className="text-accent font-medium hover:underline transition-colors">
                 Forgot password?
               </Link>
@@ -180,7 +181,7 @@ const Login = () => {
           <p className="mt-8 text-center text-sm text-text-dim">
             Don't have an account?{" "}
             <Link
-              to="/register"
+              to={PATHS.AUTH.REGISTER}
               className="font-medium text-accent hover:underline">
               Sign up
             </Link>

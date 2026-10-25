@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Check, Shield } from "lucide-react";
-
+import { PATHS } from "../../../config/paths.js";
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
@@ -13,9 +13,9 @@ const VerificationSuccess = () => {
           <p className="text-sm text-text-dim">
             Need help?{" "}
             <Link
-              to="/contact-support"
+              to={PATHS.AUTH.LOGIN}
               className="font-medium text-accent hover:underline">
-              Contact support
+              ← Back to login
             </Link>
           </p>
         }
@@ -41,7 +41,7 @@ const VerificationSuccess = () => {
 
           {/* Continue button */}
           <div className="mt-9">
-            <Link to="/login" className="block">
+            <Link to={PATHS.AUTH.LOGIN} className="block">
               <AuthButton type="button">Continue to login</AuthButton>
             </Link>
           </div>

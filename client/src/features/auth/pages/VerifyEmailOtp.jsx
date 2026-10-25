@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
-
+import { PATHS } from "../../../config/paths.js";
 import AuthHeader from "../components/AuthHeader";
 import AuthFooter from "../components/AuthFooter";
 import AuthButton from "../components/AuthButton";
@@ -117,7 +117,7 @@ const VerifyEmailOtp = () => {
         otp: enteredOtp,
       });
 
-      navigate("/verification-success");
+      navigate(PATHS.AUTH.VERIFICATION_SUCCESS);
     } catch (error) {
       console.error("Email verification failed:", error);
 
@@ -193,7 +193,7 @@ const VerifyEmailOtp = () => {
           <p className="text-sm text-text-dim">
             Already verified?{" "}
             <Link
-              to="/login"
+              to={PATHS.AUTH.LOGIN}
               className="font-medium text-accent hover:underline">
               Sign in
             </Link>
@@ -289,7 +289,7 @@ const VerifyEmailOtp = () => {
 
           <div className="mt-6 border-t border-border pt-5">
             <Link
-              to="/register"
+              to={PATHS.AUTH.REGISTER}
               className="text-sm text-text-dim transition hover:text-text">
               ← Back to registration
             </Link>
