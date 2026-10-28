@@ -1,59 +1,46 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
-
 @import "tailwindcss";
 
-@theme {
-  /* ================================
-     Fonts
-     ================================ */
+/* ========================================
+   SecureVault — Theme Configuration
+======================================== */
 
+@theme {
+  /* Typography */
   --font-sans: "Inter", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  /* ================================
-     Backgrounds
-     ================================ */
-
-  --color-bg: #0a0d12;
+  /* Background colors */
+  --color-bg: #0a0e17;
   --color-panel: #0d1117;
   --color-surface: #11151c;
   --color-surface-raised: #151a22;
+  --color-bg-secondary: #141c2d;
+  --color-bg-tertiary : #0f1522;
 
-  /* ================================
-     Borders
-     ================================ */
-
-  --color-border: #1e2530;
+  /* Border colors */
+  --color-border: #1f2839;
   --color-border-soft: #171d27;
 
-  /* ================================
-     Text
-     ================================ */
-
+  /* Text colors */
   --color-text: #e7e9ee;
   --color-text-dim: #9099a8;
   --color-text-faint: #5c6472;
 
-  /* ================================
-     Primary / Accent
-     ================================ */
-
+  /* Accent colors */
   --color-accent: #5b8def;
   --color-accent-dim: #3a5a94;
   --color-accent-glow: rgba(91, 141, 239, 0.16);
 
-  /* ================================
-     Status
-     ================================ */
-
+  /* Status colors */
   --color-good: #4fbf82;
   --color-good-glow: rgba(79, 191, 130, 0.14);
   --color-danger: #e5637a;
 }
 
-/* ================================
-   Base
-   ================================ */
+/* ========================================
+   Base Styles
+======================================== */
 
 @layer base {
   html,
@@ -61,15 +48,33 @@
     min-height: 100%;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
+    margin: 0;
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
   }
 
   button {
-    font-family: inherit;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
   }
 
   a {
@@ -77,8 +82,62 @@
     text-decoration: none;
   }
 
+  img,
+  svg {
+    display: block;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
   ::selection {
     background: var(--color-accent-glow);
     color: var(--color-text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  input,
+  textarea,
+  select {
+    color: var(--color-text);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-text-faint);
+  }
+}
+
+/* ========================================
+   Scrollbar Styling
+======================================== */
+
+@layer utilities {
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-bg);
+  }
+
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: var(--color-bg);
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 999px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-faint);
   }
 }

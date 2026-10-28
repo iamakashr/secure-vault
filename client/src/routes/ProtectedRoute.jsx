@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { PATHS } from "../config/paths.js";
 import apiClient from "../services/api/client.js";
 import { API_ENDPOINT } from "../services/api/endpoints.js";
 
@@ -42,7 +43,7 @@ const ProtectedRoute = () => {
   }
 
   if (status === "unauthenticated") {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    return <Navigate to={PATHS.AUTH.BASE} replace state={{ from: location }} />;
   }
 
   return <Outlet context={{ user }} />;

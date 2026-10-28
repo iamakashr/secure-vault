@@ -1,28 +1,27 @@
-import { Routes, Route, useOutletContext } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
+import DashboardLayout from "../layouts/DashboardLayout.jsx";
 import { PATHS } from "../config/paths.js";
 
-const DashboardPlaceholder = () => {
-  const { user } = useOutletContext();
-
-  return (
-    <div className="min-h-screen bg-[#090b10] p-8 text-[#e8eaf0]">
-      <h1 className="text-2xl font-semibold">
-        Welcome back, {user?.name || "User"} 👋
-      </h1>
-
-      <p className="mt-2 text-[#8b93a3]">
-        Your vault is ready. Let's keep your digital life secure.
-      </p>
-    </div>
-  );
-};
+import DashboardHome from "../features/dashboard/pages/DashboardHome.jsx";
+import Vault from "../features/dashboard/pages/Vault.jsx";
+import Generator from "../features/dashboard/pages/Generator.jsx";
+import Security from "../features/dashboard/pages/Security.jsx";
+import Profile from "../features/dashboard/pages/Profile.jsx";
+import Settings from "../features/dashboard/pages/Settings.jsx";
 
 const DashboardRoutes = () => {
   return (
     <Routes>
       <Route element={<ProtectedRoute />}>
-        <Route path={PATHS.DASHBOARD.HOME}  element={<DashboardPlaceholder />} />
+        <Route path={PATHS.DASHBOARD.BASE} element={<DashboardLayout />}>
+          <Route index element={<DashboardHome />} />
+          <Route path="vault" element={<Vault />} />
+          <Route path="generator" element={<Generator />} />
+          <Route path="security" element={<Security />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
       </Route>
     </Routes>
   );
