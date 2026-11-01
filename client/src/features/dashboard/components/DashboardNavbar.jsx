@@ -37,7 +37,7 @@ export default function DashboardNavbar({
         />
 
         {/* Keyboard shortcut */}
-        <kbd className="pointer-events-none absolute right-3 top-1/2 flex h-5 w-6 -translate-y-1/2 items-center justify-center rounded-md border border-[#2A3550] px-2 font-mono text-xs text-text-dim">
+        <kbd className="pointer-events-none absolute right-3 top-1/2 flex h-5 w-6 -translate-y-1/2 items-center justify-center rounded-md border border-border-intense px-2 font-mono text-xs text-text-dim">
           /
         </kbd>
       </div>

@@ -90,7 +90,7 @@ export default function DashboardSidebar() {
 
       {/* Account footer */}
       <div className="shrink-0 space-y-4  p-4">
-        <div className="rounded-xl bg-bg-tertiary border border-border transition hover:border-[#2A3550] px-3 py-4">
+        <div className="rounded-xl bg-bg-tertiary border border-border transition hover:border-border-intense px-3 py-4">
           <p className="text-xs text-text-dim">Vault storage</p>
           <p className="mt-1 text-[15px] font-extrabold text-text">
             34 of 50 items
@@ -105,7 +105,7 @@ export default function DashboardSidebar() {
 
         <Link
           to={PATHS.DASHBOARD.PROFILE}
-          className="flex min-w-0 items-center gap-3 rounded-xl border border-border bg-bg-tertiary p-2 transition hover:border-[#2A3550]">
+          className="flex min-w-0 items-center gap-3 rounded-xl border border-border bg-bg-tertiary p-2 transition hover:border-border-intense">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg  bg-[#1A2640] text-sm font-semibold text-accent">
             U
           </div>

@@ -1,3 +1,4 @@
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
@@ -16,11 +17,12 @@
   --color-surface: #11151c;
   --color-surface-raised: #151a22;
   --color-bg-secondary: #141c2d;
-  --color-bg-tertiary : #0f1522;
+  --color-bg-tertiary: #0f1522;
 
   /* Border colors */
   --color-border: #1f2839;
   --color-border-soft: #171d27;
+  --color-border-intense: #2a3550;
 
   /* Text colors */
   --color-text: #e7e9ee;
@@ -35,7 +37,18 @@
   /* Status colors */
   --color-good: #4fbf82;
   --color-good-glow: rgba(79, 191, 130, 0.14);
+
+  /* Warning colors */
+  --color-warning: #d9a441;
+  --color-warning-glow: rgba(217, 164, 65, 0.14);
+
+  /* Success colors */
+  --color-success: #4fbf82;
+--color-success-glow: rgba(79, 191, 130, 0.14);
+
+/* Danger colors */
   --color-danger: #e5637a;
+  --color-danger-glow: rgba(229, 99, 122, 0.14);
 }
 
 /* ========================================
