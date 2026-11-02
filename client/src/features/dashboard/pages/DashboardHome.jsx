@@ -11,7 +11,7 @@ const DashboardHome = () => {
     <>
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Good evening Akash</h1>
-        <p className="text-gray-500 text-sm">
+        <p className="text-text-dim text-sm">
           Your vault is unlocked and protected. Here’s a quick overview.
         </p>
       </div>
